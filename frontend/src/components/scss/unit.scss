@@ -1,0 +1,17 @@
+@import 'mixins';
+
+.Unit {
+  flex: 1 1 0;
+  margin: 20px;
+  padding: 10px;
+  max-width: 150px;
+  @include border;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.selectedUnit {
+  background: lightgreen;
+}
