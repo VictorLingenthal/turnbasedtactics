@@ -42,8 +42,13 @@ const initResolvers = {
       console.log('applyAbility')
       console.log(pubsub.publish)
 
-      pubsub.publish('SEND_CHANGE', {
-        sendChange: 'Change'
+      pubsub.publish('SEND_TURN', {
+        sendTurn: {
+          applyingUnitID: args.applyingUnitID,
+          unitAbilityName: args.unitAbilityName,
+          recivingUnitID: args.recivingUnitID,
+          recivingUnitIDs: args.recivingUnitIDs
+        }
       });
 
       serverGameService.callApplyAbility(
@@ -56,11 +61,10 @@ const initResolvers = {
     },
   },
   Subscription: {
-    sendChange: {
-      // More on pubsub below
+    sendTurn: {
       subscribe: (_:any, __:any) => {
-        console.log('Call Subscription')
-        return pubsub.asyncIterator('SEND_CHANGE')
+        console.log('Send Turn')
+        return pubsub.asyncIterator('SEND_TURN')
       },
     },
   },

@@ -19,18 +19,25 @@ export const typeDefs = gql`
     target: String
   }
 
+  type changeTurnInfo {
+    applyingUnitID: [ID]
+    unitAbilityName: String
+    recivingUnitID: [ID]
+    recivingUnitIDs:[[ID]]
+  }
+
   type Mutation {
     addName(name:String):String
     applyAbility(
-      applyingUnitID: [ID],
-      unitAbilityName: String,
-      recivingUnitID: [ID],
+      applyingUnitID: [ID]
+      unitAbilityName: String
+      recivingUnitID: [ID]
       recivingUnitIDs:[[ID]]
     ):String
   }
 
   type Subscription {
-    sendChange: String
+    sendTurn: changeTurnInfo
   }
 
 `;

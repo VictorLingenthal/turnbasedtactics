@@ -27,19 +27,23 @@ var initResolvers = {
         applyAbility: function (__, args) {
             console.log('applyAbility');
             console.log(pubsub.publish);
-            pubsub.publish('SEND_CHANGE', {
-                sendChange: 'Change'
+            pubsub.publish('SEND_TURN', {
+                sendTurn: {
+                    applyingUnitID: args.applyingUnitID,
+                    unitAbilityName: args.unitAbilityName,
+                    recivingUnitID: args.recivingUnitID,
+                    recivingUnitIDs: args.recivingUnitIDs
+                }
             });
             serverGameService.callApplyAbility(args.applyingUnitID, args.unitAbilityName, args.recivingUnitID, args.recivingUnitIDs);
             return 'applyAbility: ' + args.applyingUnitID + " - " + args.unitAbilityName + " - " + args.recivingUnitID + " - " + args.recivingUnitIDs;
         },
     },
     Subscription: {
-        sendChange: {
-            // More on pubsub below
+        sendTurn: {
             subscribe: function (_, __) {
-                console.log('Call Subscription');
-                return pubsub.asyncIterator('SEND_CHANGE');
+                console.log('Send Turn');
+                return pubsub.asyncIterator('SEND_TURN');
             },
         },
     },
