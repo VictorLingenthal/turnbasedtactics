@@ -29,13 +29,13 @@ export class ServerGameService extends GameService implements IGameService {
     recivingUnitIDs:UnitID[]
   ):Boolean => {
     const applyingUnit = this.getUnitbyUnitID(applyingUnitID)
-    console.log(applyingUnit)
+    // console.log(applyingUnit)
     const unitAbility = applyingUnit.abilities.filter(ability => ability.name === unitAbilityName)[0]
-    console.log(unitAbility)
+    // console.log(unitAbility)
     const recivingUnit = this.getUnitbyUnitID(recivingUnitID)
-    console.log(recivingUnit)
+    // console.log(recivingUnit)
     const recivingUnits = recivingUnitIDs.map(recivingUnitID => this.getUnitbyUnitID(recivingUnitID))
-    console.log(recivingUnits)
+    // console.log(recivingUnits)
 
     this.applyAbility(
       applyingUnit,

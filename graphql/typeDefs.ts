@@ -29,4 +29,8 @@ export const typeDefs = gql`
     ):String
   }
 
+  type Subscription {
+    sendChange: String
+  }
+
 `;

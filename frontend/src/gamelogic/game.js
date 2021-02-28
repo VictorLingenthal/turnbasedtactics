@@ -6,7 +6,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
 var liveUnit_1 = require("./liveUnit");
 var Game = /** @class */ (function () {

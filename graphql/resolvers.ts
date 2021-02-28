@@ -1,6 +1,10 @@
 
 import merge from "lodash/merge.js"
 
+import { PubSub } from 'apollo-server'
+
+const pubsub = new PubSub();
+
 import { ServerGameService } from '../frontend/src/services/serverGameService'
 
 const serverGameService = new ServerGameService
@@ -34,11 +38,13 @@ const initResolvers = {
   Mutation : {
     addName: (__:any, args:any) => args.name,
     applyAbility: (__:any, args:any) => {
+
       console.log('applyAbility')
-      console.log(args.applyingUnitID)
-      console.log(args.unitAbilityName)
-      console.log(args.recivingUnitID)
-      console.log(args.recivingUnitIDs)
+      console.log(pubsub.publish)
+
+      pubsub.publish('SEND_CHANGE', {
+        sendChange: 'Change'
+      });
 
       serverGameService.callApplyAbility(
         args.applyingUnitID,
@@ -48,7 +54,16 @@ const initResolvers = {
       )
       return 'applyAbility: ' + args.applyingUnitID + " - " + args.unitAbilityName + " - " + args.recivingUnitID + " - " + args.recivingUnitIDs
     },
-  }
+  },
+  Subscription: {
+    sendChange: {
+      // More on pubsub below
+      subscribe: (_:any, __:any) => {
+        console.log('Call Subscription')
+        return pubsub.asyncIterator('SEND_CHANGE')
+      },
+    },
+  },
 }
 
 export const resolvers = merge(
