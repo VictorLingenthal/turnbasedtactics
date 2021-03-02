@@ -18,7 +18,7 @@ export interface IGame {
   units: ILiveUnit[]
 
   getUnitsByPlayer(player:IPlayer):ILiveUnit[]
-  applyAbility(applyingUnit:ILiveUnit, unitability:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):ILiveUnit[]
+  applyAbility(applyingUnit:ILiveUnit, unitability:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void
 }
 
 export class Game implements IGame {
@@ -46,27 +46,31 @@ export class Game implements IGame {
     return playerUnits
   }
 
-  public applyAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):ILiveUnit[] => {
+  private insertUnits = (units:ILiveUnit[]):void => {
+    for (let i = 0; i < units.length; i++) {
+      let updatedUnit = units[i]
+      this.units = this.units.map(unit => (updatedUnit.id === unit.id && updatedUnit.player.id === unit.player.id) ? updatedUnit : unit)
+    }
+  }
+
+  public applyAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void => {
 
     switch (unitAbility.targets[0]) {
       case 'Clicked' : {
         const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, [recivingUnit])
-
+        this.insertUnits(updatedUnits)
         this.changeTurn()
-
-        return recivingUnits.map((unit, idx) => idx === recivingUnit.id ? updatedUnits[0] : unit);
+        return
       }
       case 'All_by_Player' : {
         const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, recivingUnits)
-
+        this.insertUnits(updatedUnits)
         this.changeTurn()
-
-        return updatedUnits
+        return
       }
       default: {
         this.changeTurn()
-
-        return recivingUnits
+        return
       }
 
     }

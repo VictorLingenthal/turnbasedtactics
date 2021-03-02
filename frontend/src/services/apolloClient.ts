@@ -1,10 +1,7 @@
 
-import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, split, gql } from '@apollo/client';
-
+import { ApolloClient, InMemoryCache, HttpLink, split, gql } from '@apollo/client';
 import { WebSocketLink } from '@apollo/client/link/ws';
-
 import { getMainDefinition } from 'apollo-utilities';
-
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4444/graphql'
@@ -40,23 +37,3 @@ export const apolloClient = new ApolloClient({
   uri: "http://localhost:4444/graphql",
   cache: new InMemoryCache()
 })
-
-apolloClient.subscribe({
-  query: gql`
-    subscription onTurn {
-      sendTurn {
-        applyingUnitID
-        unitAbilityName
-        recivingUnitID
-        recivingUnitIDs
-      }
-    }
-    `,
-  variables: {}
-}).subscribe({
-  next (data) {
-    console.log('Subscription onTurn event')
-    console.log(data)
-    // Notify your application with the new arrived data
-  }
-});

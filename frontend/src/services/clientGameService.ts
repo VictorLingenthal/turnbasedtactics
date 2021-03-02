@@ -1,5 +1,5 @@
 
-import { GameService, IGameService } from './gameService'
+import { GameService, IGameService, UnitID } from './gameService'
 
 import { gql } from '@apollo/client';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
@@ -9,21 +9,17 @@ import { IUnitAbility} from '../gamelogic/unitModels'
 
 export class ClientGameService extends GameService implements IGameService {
 
-  private apolloClient:ApolloClient<NormalizedCacheObject>
+  private apolloClient: ApolloClient<NormalizedCacheObject>
+  public incTurn: Function
 
   constructor (apolloClient:ApolloClient<NormalizedCacheObject>) {
     super()
     this.apolloClient = apolloClient
+    this.setUpSubscription()
+    this.incTurn = () => {console.log('incTurn() not Set')}
   }
 
-  public applyAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):ILiveUnit[] => {
-
-    console.log('ClientGameService - applyAbility')
-    console.log(this.createUnitID(applyingUnit))
-    console.log(unitAbility.ability.name)
-    console.log(this.createUnitID(recivingUnit))
-    console.log(recivingUnits.map(unit => this.createUnitID(unit)))
-
+  public dispatchAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void => {
     this.apolloClient.mutate({
       variables: {
         applyingUnitID: this.createUnitID(applyingUnit),
@@ -49,7 +45,41 @@ export class ClientGameService extends GameService implements IGameService {
     })
     .then(res => console.log(res))
     .catch(err => console.log(err))
-
-    return this.game.applyAbility(applyingUnit, unitAbility, recivingUnit, recivingUnits)
   }
+
+  private setUpSubscription = () => {
+    const self = this
+    this.apolloClient.subscribe({
+      query: gql`
+        subscription onTurn {
+          sendTurn {
+            applyingUnitID
+            unitAbilityName
+            recivingUnitID
+            recivingUnitIDs
+          }
+        }
+        `,
+      variables: {}
+    }).subscribe({
+      next (obj) {
+        console.log('Subscription onTurn event new')
+        const args = obj.data.sendTurn
+
+        self.unitCountByPlayer()
+
+        self.callApplyAbility(
+          args.applyingUnitID,
+          args.unitAbilityName,
+          args.recivingUnitID,
+          args.recivingUnitIDs
+        )
+
+        self.incTurn()
+        self.unitCountByPlayer()
+      }
+    })
+  }
+
+
 }

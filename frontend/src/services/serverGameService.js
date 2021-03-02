@@ -18,21 +18,7 @@ var gameService_1 = require("./gameService");
 var ServerGameService = /** @class */ (function (_super) {
     __extends(ServerGameService, _super);
     function ServerGameService() {
-        var _this = _super.call(this) || this;
-        _this.applyAbility = function (applyingUnit, unitAbility, recivingUnit, recivingUnits) { return _this.game.applyAbility(applyingUnit, unitAbility, recivingUnit, recivingUnits); };
-        _this.callApplyAbility = function (applyingUnitID, unitAbilityName, recivingUnitID, recivingUnitIDs) {
-            var applyingUnit = _this.getUnitbyUnitID(applyingUnitID);
-            // console.log(applyingUnit)
-            var unitAbility = applyingUnit.abilities.filter(function (ability) { return ability.name === unitAbilityName; })[0];
-            // console.log(unitAbility)
-            var recivingUnit = _this.getUnitbyUnitID(recivingUnitID);
-            // console.log(recivingUnit)
-            var recivingUnits = recivingUnitIDs.map(function (recivingUnitID) { return _this.getUnitbyUnitID(recivingUnitID); });
-            // console.log(recivingUnits)
-            _this.applyAbility(applyingUnit, unitAbility, recivingUnit, recivingUnits);
-            return false;
-        };
-        return _this;
+        return _super.call(this) || this;
     }
     return ServerGameService;
 }(gameService_1.GameService));

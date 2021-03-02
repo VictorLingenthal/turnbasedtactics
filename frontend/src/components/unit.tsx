@@ -3,17 +3,19 @@ import React, { FC, useState } from 'react'
 import { IPlayer } from '../gamelogic/player'
 import { IUnitAbility } from '../gamelogic/unitModels'
 import { ILiveUnit } from '../gamelogic/liveUnit'
+import { IGameService } from '../services/GameService'
 
 import './scss/unit.scss'
 
 let Unit: FC<{
   unit:ILiveUnit
   turn:[number,Function]
-  dispatchMyAbility: Function
-  dispatchEnemyAbility: Function
+  gameService: IGameService
   selectedAbilty:[IUnitAbility|null,Function]
   selectedUnit:[ILiveUnit|null,Function]
 }> = (props) => {
+
+  const gameService = props.gameService
 
   const unit = props.unit
   const [selectedUnit, setSelectedUnit] = props.selectedUnit
@@ -21,23 +23,14 @@ let Unit: FC<{
   const [turn, setTurn] = props.turn
 
   const executeAbility = () => {
-    if (props.unit.player.id === 1)
-      props.dispatchMyAbility({
-        type: 'apply',
-        applyingUnit: selectedUnit,
-        selectedAbilty: selectedAbilty,
-        receivingUnit: unit
-      })
-    if (props.unit.player.id === 2)
-      props.dispatchEnemyAbility({
-        type: 'apply',
-        applyingUnit: selectedUnit,
-        selectedAbilty: selectedAbilty,
-        receivingUnit: unit
-      })
+    gameService.dispatchAbility(
+      selectedUnit,
+      selectedAbilty,
+      unit,
+      gameService.game.units.filter(u => u.player.name === unit.player.name)
+    )
     setSelectedUnit(null)
     setSelectedAbilty(null)
-    setTurn(turn+1)
   }
 
   return (
@@ -45,11 +38,11 @@ let Unit: FC<{
         className={"Unit" + (selectedUnit === unit ? " selectedUnit": "")}
         onClick={e => {
             //Check whose turn it is
-            if (turn%2+1 === props.unit.player.id) {
+            if (turn%2+1 === unit.player.id) {
               if (selectedAbilty && selectedAbilty.ability.targets[0] === 'Ally') {
                 executeAbility()
               } else {
-                if (selectedUnit === null || props.unit.player.id === selectedUnit.player.id) {
+                if (selectedUnit === null || unit.player.id === selectedUnit.player.id) {
                   setSelectedUnit(selectedUnit === unit ? null : unit)
                   setSelectedAbilty(null)
                 }
@@ -65,8 +58,10 @@ let Unit: FC<{
           }
         }>
         <h4>{unit.name}</h4>
+        <h4>ID: {unit.id}</h4>
         <h6>{unit.life > 0 ? 'Alive' : 'Dead'}</h6>
-        <h6>{props.unit.player.name}</h6>
+        <h6>{unit.player.name}</h6>
+        <h6>PlayerID: {unit.player.id}</h6>
         <div>Life: <span>{unit.life > 0? unit.life : 0}</span></div>
 
       </div>

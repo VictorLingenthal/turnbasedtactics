@@ -20,21 +20,32 @@ var Game = /** @class */ (function () {
             _this.units = __spreadArrays(_this.units, playerUnits);
             return playerUnits;
         };
+        this.insertUnits = function (units) {
+            var _loop_1 = function (i) {
+                var updatedUnit = units[i];
+                _this.units = _this.units.map(function (unit) { return (updatedUnit.id === unit.id && updatedUnit.player.id === unit.player.id) ? updatedUnit : unit; });
+            };
+            for (var i = 0; i < units.length; i++) {
+                _loop_1(i);
+            }
+        };
         this.applyAbility = function (applyingUnit, unitAbility, recivingUnit, recivingUnits) {
             switch (unitAbility.targets[0]) {
                 case 'Clicked': {
-                    var updatedUnits_1 = unitAbility.ability.apply(applyingUnit, unitAbility, [recivingUnit]);
+                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, [recivingUnit]);
+                    _this.insertUnits(updatedUnits);
                     _this.changeTurn();
-                    return recivingUnits.map(function (unit, idx) { return idx === recivingUnit.id ? updatedUnits_1[0] : unit; });
+                    return;
                 }
                 case 'All_by_Player': {
                     var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, recivingUnits);
+                    _this.insertUnits(updatedUnits);
                     _this.changeTurn();
-                    return updatedUnits;
+                    return;
                 }
                 default: {
                     _this.changeTurn();
-                    return recivingUnits;
+                    return;
                 }
             }
         };

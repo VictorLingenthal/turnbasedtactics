@@ -8,23 +8,10 @@ import { IUnitAbility } from '../gamelogic/unitModels'
 import { ILiveUnit } from '../gamelogic/liveUnit'
 import Unit from './unit'
 
-import { ClientGameService } from '../services/clientGameService'
+import { ClientGameService } from '../services/clientgameService'
 
 console.log('New Game Loading')
-
-const gameservice = new ClientGameService(apolloClient)
-
-function receiveAbility(recivingUnits:ILiveUnit[], action:any):ILiveUnit[] {
-  switch (action.type) {
-    case 'apply' : {
-      return gameservice.applyAbility(action.applyingUnit, action.selectedAbilty, action.receivingUnit, recivingUnits)
-    }
-    default: {
-      return recivingUnits
-    }
-  }
-}
-
+const gameService = new ClientGameService(apolloClient)
 
 let Menu: FC<{
 
@@ -35,15 +22,23 @@ let Menu: FC<{
     unitservice.getUnits((unit:ILiveUnit) => console.log(unit))
   },[])
 
-  const [myunits, dispatchMyAbilities] = useReducer(receiveAbility, gameservice.game?.getUnitsByPlayer(gameservice.game.players[0]));
-  const [enemyunits, dispatchEnemyAbilities] = useReducer(receiveAbility, gameservice.game?.getUnitsByPlayer(gameservice.game.players[1]));
-  const turnState = useState(1)
+  const [units, setUnits] = useState(gameService.game?.units);
+  const turnState = useState(gameService.game.turn)
   const [turn, setTurn] = turnState
 
+  const incTurn = () => {
+    console.log('IncTurn!')
+    setTurn(turn+1)
+  }
+  gameService.incTurn = incTurn
+
   useEffect(() => {
-    console.log('Update Turn')
-    setTurn(gameservice.game.turn)
-  },[gameservice])
+    // console.log('Turn changed')
+    if (turn != gameService.game.turn)
+      console.error('There was a problem with the turn system')
+    // setTurn(gameService.game.turn)
+    setUnits(gameService.game.units)
+  },[turn])
 
   const selectedUnitState = useState(null)
   const [selectedUnit, setSelectedUnit] = selectedUnitState
@@ -57,13 +52,12 @@ let Menu: FC<{
       <div className="Turn">Turn: {turn} - CurrentPlayer: {turn%2}</div>
       <div className="Battle">
         {
-          myunits.map((unit) =>
+          units.filter(unit => unit.player.name == gameService.game.players[0].name).map((unit) =>
             <Unit
               key={unit.id}
               unit={unit}
               turn={turnState}
-              dispatchMyAbility={dispatchMyAbilities}
-              dispatchEnemyAbility={dispatchEnemyAbilities}
+              gameService={gameService}
               selectedAbilty={selectedAbilityState}
               selectedUnit={selectedUnitState}
             />
@@ -71,13 +65,12 @@ let Menu: FC<{
         }
         <div className="Divider">vs</div>
         {
-          enemyunits.map((unit) =>
+          units.filter(unit => unit.player.name == gameService.game.players[1].name).map((unit) =>
             <Unit
               key={unit.id}
               unit={unit}
               turn={turnState}
-              dispatchMyAbility={dispatchMyAbilities}
-              dispatchEnemyAbility={dispatchEnemyAbilities}
+              gameService={gameService}
               selectedAbilty={selectedAbilityState}
               selectedUnit={selectedUnitState}
             />
@@ -85,6 +78,7 @@ let Menu: FC<{
         }
 
       </div>
+
       <div className="Controls">
         {
           selectedUnit?.abilities.map((ability:IUnitAbility) =>
