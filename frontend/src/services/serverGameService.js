@@ -17,8 +17,8 @@ exports.ServerGameService = void 0;
 var gameService_1 = require("./gameService");
 var ServerGameService = /** @class */ (function (_super) {
     __extends(ServerGameService, _super);
-    function ServerGameService() {
-        return _super.call(this) || this;
+    function ServerGameService(args) {
+        return _super.call(this, args) || this;
     }
     return ServerGameService;
 }(gameService_1.GameService));

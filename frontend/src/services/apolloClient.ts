@@ -35,5 +35,6 @@ const splitLink = split(
 export const apolloClient = new ApolloClient({
   link: splitLink,
   uri: "http://localhost:4444/graphql",
+  // uri: "/graphql",
   cache: new InMemoryCache()
 })

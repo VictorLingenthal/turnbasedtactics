@@ -1,25 +1,14 @@
 
-import { GameService, IGameService, UnitID } from './gameService'
+import { GameService, IGameService } from './gameService'
 
-import { ILiveUnit } from '../gamelogic/liveUnit'
-import { IUnitAbility} from '../gamelogic/unitModels'
+export interface IServerGameService extends IGameService {
 
-export class ServerGameService extends GameService implements IGameService {
+}
 
-  constructor () {
-    super()
+export class ServerGameService extends GameService implements IServerGameService {
+
+  constructor (args) {
+    super(args)
   }
-
-  // public applyAbility = (
-  //   applyingUnit:ILiveUnit,
-  //   unitAbility:IUnitAbility,
-  //   recivingUnit:ILiveUnit,
-  //   recivingUnits:ILiveUnit[]
-  // ):ILiveUnit[] => this.game.applyAbility(
-  //   applyingUnit,
-  //   unitAbility,
-  //   recivingUnit,
-  //   recivingUnits
-  // )
 
 }

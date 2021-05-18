@@ -1,0 +1,12 @@
+@import 'mixins';
+
+.gameListComponent {
+  margin: 20px;
+
+  .openGame {margin: 20px}
+  table, th, td {
+    border: 1px solid lightgrey;
+    border-collapse: collapse;
+  }
+  th, td {padding: 10px 30px}
+}

@@ -12,7 +12,7 @@ var liveUnit_1 = require("./liveUnit");
 var Game = /** @class */ (function () {
     function Game(args) {
         var _this = this;
-        this.initializePlayers = function () {
+        this.initializeGame = function () {
             return _this.players.map(function (player) { return player.units = _this.initializeUnits(player); });
         };
         this.initializeUnits = function (player) {
@@ -21,24 +21,22 @@ var Game = /** @class */ (function () {
             return playerUnits;
         };
         this.insertUnits = function (units) {
-            var _loop_1 = function (i) {
-                var updatedUnit = units[i];
-                _this.units = _this.units.map(function (unit) { return (updatedUnit.id === unit.id && updatedUnit.player.id === unit.player.id) ? updatedUnit : unit; });
-            };
-            for (var i = 0; i < units.length; i++) {
-                _loop_1(i);
-            }
+            for (var i in units)
+                _this.units = _this.units.map(function (unit) { return (units[i].id === unit.id && units[i].player.id === unit.player.id) ? units[i] : unit; });
+        };
+        this.filterDeadUnits = function (units) {
+            return units.filter(function (unit) { return unit.life != 0; });
         };
         this.applyAbility = function (applyingUnit, unitAbility, recivingUnit, recivingUnits) {
             switch (unitAbility.targets[0]) {
                 case 'Clicked': {
-                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, [recivingUnit]);
+                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits([recivingUnit]));
                     _this.insertUnits(updatedUnits);
                     _this.changeTurn();
                     return;
                 }
                 case 'All_by_Player': {
-                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, recivingUnits);
+                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits(recivingUnits));
                     _this.insertUnits(updatedUnits);
                     _this.changeTurn();
                     return;
@@ -53,8 +51,9 @@ var Game = /** @class */ (function () {
             return _this.units.filter(function (unit) { return unit.player === player; });
         };
         this.changeTurn = function () {
+            var _a;
             if (_this.checkForWinner()) {
-                console.log('TBD: proclaim winner');
+                (_a = _this.gameService) === null || _a === void 0 ? void 0 : _a.endGame(_this.winner);
             }
             else {
                 _this.switchToNextPlayer();
@@ -68,14 +67,31 @@ var Game = /** @class */ (function () {
             _this.currentPlayer = _this.players[idxNextPlayer];
         };
         this.checkForWinner = function () {
-            console.log('TBD: are there losers?');
+            var players_to_remove = [];
+            for (var i in _this.remaining_players) {
+                var remainingUnits = _this.units.filter(function (unit) {
+                    return unit.life > 0 &&
+                        unit.player.id === _this.remaining_players[i].id;
+                }).length;
+                if (remainingUnits === 0)
+                    players_to_remove.push(_this.remaining_players[i]);
+            }
+            for (var i in players_to_remove)
+                _this.remaining_players = _this.remaining_players.filter(function (player) { return player.name != players_to_remove[i].name; });
+            if (_this.remaining_players.length === 1) {
+                _this.winner = _this.remaining_players[0];
+                return true;
+            }
             return false;
         };
+        this.getWinner = function () { return _this.winner; };
+        this.gameService = args.gameService;
         this.players = args.players;
+        this.remaining_players = this.players;
         this.turn = args.turn || 0;
         this.currentPlayer = args.currentPlayer || args.players[0];
         this.units = [];
-        this.initializePlayers();
+        this.initializeGame();
     }
     return Game;
 }());

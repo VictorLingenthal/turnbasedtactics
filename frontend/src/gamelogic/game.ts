@@ -1,10 +1,15 @@
 
-import { IUnitModel, IUnitAbility, Knight, Healer } from './unitModels'
+import { IUnitAbility } from './unitModels'
 import { IPlayer } from './player'
 import { GameUnit, ILiveUnit } from './liveUnit'
+import { IGameService } from '../services/gameService'
 
+interface IGameObserver {
+  endGame(player:IPlayer):void
+}
 
 export interface IGameState {
+  gameService: IGameService
   players: IPlayer[]
   turn?: number
   currentPlayer?: IPlayer
@@ -13,9 +18,13 @@ export interface IGameState {
 
 export interface IGame {
   players: IPlayer[]
+  remaining_players: IPlayer[]
+  winner: IPlayer
   turn: number
   currentPlayer: IPlayer
   units: ILiveUnit[]
+
+  getWinner():IPlayer
 
   getUnitsByPlayer(player:IPlayer):ILiveUnit[]
   applyAbility(applyingUnit:ILiveUnit, unitability:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void
@@ -23,21 +32,28 @@ export interface IGame {
 
 export class Game implements IGame {
 
+  private gameService:IGameObserver
+
   public players: IPlayer[]
+  public remaining_players: IPlayer[]
   public currentPlayer: IPlayer
+  public winner: IPlayer
   public turn: number
   public units: ILiveUnit[]
 
+
   constructor(args:IGameState) {
+    this.gameService = args.gameService
     this.players = args.players
+    this.remaining_players = this.players
     this.turn = args.turn || 0
     this.currentPlayer = args.currentPlayer || args.players[0]
     this.units = []
 
-    this.initializePlayers()
+    this.initializeGame()
   }
 
-  private initializePlayers = ():ILiveUnit[][] =>
+  private initializeGame = ():ILiveUnit[][] =>
     this.players.map(player => player.units = this.initializeUnits(player))
 
   private initializeUnits = (player:IPlayer):ILiveUnit[] => {
@@ -47,23 +63,24 @@ export class Game implements IGame {
   }
 
   private insertUnits = (units:ILiveUnit[]):void => {
-    for (let i = 0; i < units.length; i++) {
-      let updatedUnit = units[i]
-      this.units = this.units.map(unit => (updatedUnit.id === unit.id && updatedUnit.player.id === unit.player.id) ? updatedUnit : unit)
-    }
+    for (var i in units)
+      this.units = this.units.map(unit => (units[i].id === unit.id && units[i].player.id === unit.player.id) ? units[i] : unit)
   }
+
+  private filterDeadUnits = (units:ILiveUnit[]):ILiveUnit[] =>
+    units.filter(unit => unit.life != 0)
 
   public applyAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void => {
 
     switch (unitAbility.targets[0]) {
       case 'Clicked' : {
-        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, [recivingUnit])
+        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits([recivingUnit]))
         this.insertUnits(updatedUnits)
         this.changeTurn()
         return
       }
       case 'All_by_Player' : {
-        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, recivingUnits)
+        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits(recivingUnits))
         this.insertUnits(updatedUnits)
         this.changeTurn()
         return
@@ -81,7 +98,7 @@ export class Game implements IGame {
 
   private changeTurn = () => {
     if (this.checkForWinner()) {
-      console.log('TBD: proclaim winner')
+      this.gameService?.endGame(this.winner)
     } else {
       this.switchToNextPlayer()
       this.turn++
@@ -96,9 +113,34 @@ export class Game implements IGame {
     this.currentPlayer = this.players[idxNextPlayer]
   }
 
-  private checkForWinner = () => {
-    console.log('TBD: are there losers?')
+  private checkForWinner = ():Boolean => {
+
+    const players_to_remove:IPlayer[] = []
+
+    for (var i in this.remaining_players) {
+
+      const remainingUnits = this.units.filter(unit =>
+         unit.life > 0 &&
+         unit.player.id === this.remaining_players[i].id
+      ).length
+
+      if (remainingUnits === 0)
+        players_to_remove.push(this.remaining_players[i])
+
+    }
+
+    for (var i in players_to_remove)
+      this.remaining_players = this.remaining_players.filter(player => player.name != players_to_remove[i].name)
+
+    if (this.remaining_players.length === 1) {
+      this.winner = this.remaining_players[0]
+      return true
+    }
+
     return false
   }
+
+  public getWinner = ():IPlayer => this.winner
+
 
 }

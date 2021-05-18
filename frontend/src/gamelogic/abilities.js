@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Heal = exports.Attack = void 0;
+exports.Burn = exports.Heal = exports.Attack = void 0;
 exports.Attack = {
     name: 'Attack',
     targets: ['Enemy'],
@@ -21,4 +21,9 @@ exports.Heal = {
     name: 'Heal',
     targets: ['Ally'],
     apply: function (applyingUnit, unitAbility, recivingUnits) { return (recivingUnits.map(function (unit) { return (__assign(__assign({}, unit), { life: Math.min(unit.maxlife, unit.life + unitAbility.damage) })); })); }
+};
+exports.Burn = {
+    name: 'Burn',
+    targets: ['Enemy'],
+    apply: function (applyingUnit, unitAbility, recivingUnits) { return (recivingUnits.map(function (unit) { return (__assign(__assign({}, unit), { life: Math.min(unit.maxlife, unit.life - unitAbility.damage) })); })); }
 };

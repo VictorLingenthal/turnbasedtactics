@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Healer = exports.Knight = exports.GameUnit = void 0;
+exports.Witch = exports.Healer = exports.Knight = exports.GameUnit = void 0;
 var abilities_1 = require("./abilities");
 var GameUnit = /** @class */ (function () {
     function GameUnit(data) {
@@ -13,21 +13,34 @@ var GameUnit = /** @class */ (function () {
 exports.GameUnit = GameUnit;
 exports.Knight = {
     name: 'Knight',
-    maxlife: 50,
+    maxlife: 40,
     abilities: [{
             name: abilities_1.Attack.name,
             damage: 10,
+            timeout: 1,
             targets: ['Clicked'],
             ability: abilities_1.Attack
         }]
 };
 exports.Healer = {
     name: 'Healer',
-    maxlife: 30,
+    maxlife: 20,
     abilities: [{
             name: abilities_1.Heal.name,
             damage: 6,
             targets: ['All_by_Player'],
+            timeout: 2,
             ability: abilities_1.Heal
+        }]
+};
+exports.Witch = {
+    name: 'Healer',
+    maxlife: 10,
+    abilities: [{
+            name: abilities_1.Burn.name,
+            damage: 10,
+            timeout: 3,
+            targets: ['All_by_Enemy'],
+            ability: abilities_1.Burn
         }]
 };

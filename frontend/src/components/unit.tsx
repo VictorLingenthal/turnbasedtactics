@@ -1,9 +1,9 @@
-import React, { FC, useState } from 'react'
+import { FC, useState } from 'react'
 
-import { IPlayer } from '../gamelogic/player'
 import { IUnitAbility } from '../gamelogic/unitModels'
 import { ILiveUnit } from '../gamelogic/liveUnit'
-import { IGameService } from '../services/GameService'
+import { IGameService } from '../services/gameService'
+import { UserService } from '../services/userService'
 
 import './scss/unit.scss'
 
@@ -23,6 +23,7 @@ let Unit: FC<{
   const [turn, setTurn] = props.turn
 
   const executeAbility = () => {
+    console.log('executeAbility')
     gameService.dispatchAbility(
       selectedUnit,
       selectedAbilty,
@@ -38,12 +39,12 @@ let Unit: FC<{
         className={"Unit" + (selectedUnit === unit ? " selectedUnit": "")}
         onClick={e => {
             //Check whose turn it is
-            if (turn%2+1 === unit.player.id) {
+            if (turn%2+1 === unit.player.id && UserService.getInstance().userID === unit.player.userID) {
               if (selectedAbilty && selectedAbilty.ability.targets[0] === 'Ally') {
                 executeAbility()
               } else {
                 if (selectedUnit === null || unit.player.id === selectedUnit.player.id) {
-                  setSelectedUnit(selectedUnit === unit ? null : unit)
+                  setSelectedUnit((selectedUnit !== unit && unit.life > 0 ) ? unit : null)
                   setSelectedAbilty(null)
                 }
                 else console.log('no ability selected')
@@ -58,10 +59,10 @@ let Unit: FC<{
           }
         }>
         <h4>{unit.name}</h4>
-        <h4>ID: {unit.id}</h4>
+        {/*}<h4>unitID: {unit.id}</h4> */}
         <h6>{unit.life > 0 ? 'Alive' : 'Dead'}</h6>
         <h6>{unit.player.name}</h6>
-        <h6>PlayerID: {unit.player.id}</h6>
+        {/* }<h6>PlayerID: {unit.player.id}</h6> */}
         <div>Life: <span>{unit.life > 0? unit.life : 0}</span></div>
 
       </div>

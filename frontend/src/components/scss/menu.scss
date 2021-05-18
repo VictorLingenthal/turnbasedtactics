@@ -1,0 +1,16 @@
+
+.menu {
+  max-width: 150px;
+  border-right: 1px solid lightgray;
+  overflow: hidden;
+
+  .auth {min-height: 200px}
+  .menulist {
+    margin: 10px 0;
+    padding: 10px 0 0 40px;
+    border-top: 1px solid grey;
+    list-style-type: none;
+
+    li {padding: 10px 0}
+  }
+}

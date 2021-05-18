@@ -1,0 +1,40 @@
+.auth {
+  .user {
+    .authlinks {
+      margin: 20px 0;
+      text-align: center;
+      .authlink {
+        color: blue;
+        text-decoration: underline;
+      }
+    }
+    label {
+      margin: 0 10px;
+    }
+    input {
+      display: block;
+      margin: 10px auto;
+      width: 85%;
+
+      border: 1px solid lightgray;
+      border-radius: 3px;
+      line-height: 30px;
+    }
+    .loginMessage {
+      margin: 20px 0 0 0;
+      padding: 20px;
+      text-align: center;
+      height: 20px;
+    }
+    .success {
+      color: green
+    }
+    .failure {
+      color: red
+    }
+    button {
+      float: right;
+      margin: 10px;
+    }
+  }
+}

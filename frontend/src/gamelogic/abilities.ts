@@ -29,3 +29,14 @@ export const Heal:IAbility = {
       })
     ))
 }
+
+export const Burn:IAbility = {
+    name: 'Burn',
+    targets: ['Enemy'],
+    apply: (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnits:ILiveUnit[]) => (
+      recivingUnits.map(unit => ({
+        ...unit,
+        life: Math.min(unit.maxlife,unit.life-unitAbility.damage)
+      })
+    ))
+}

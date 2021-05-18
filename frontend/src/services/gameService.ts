@@ -1,14 +1,25 @@
 
 import { Game, IGame } from '../gamelogic/game'
-import { Player1, Player2, IPlayer } from '../gamelogic/player'
+import { Player, IPlayer, IPlayerStub } from '../gamelogic/player'
 import { ILiveUnit } from '../gamelogic/liveUnit'
 import { IUnitAbility} from '../gamelogic/unitModels'
 
 export type UnitID = [number:number,number:number]
 
+export interface IGameServiceConstructor {
+  gameID?: String
+  players?: IPlayerStub
+}
+
+interface IGameServiceObserver {
+  endGame(winner:IPlayer):void
+}
+
 export interface IGameService {
   players: IPlayer[]
   game: IGame
+  gameID:String
+  checkCurrentPlayerByID(userID:String):Boolean
   dispatchAbility(
     applyingUnit:ILiveUnit,
     unitAbility:IUnitAbility,
@@ -23,21 +34,43 @@ export interface IGameService {
   ):Boolean
   createUnitID(unit:ILiveUnit):UnitID
   getUnitbyUnitID(unitID:UnitID):ILiveUnit
-  unitCountByPlayer():void
+  // unitCountByPlayer():void
+  endGame(winner:IPlayer):void
 }
 
 export class GameService implements IGameService {
 
   public players:IPlayer[]
   public game:IGame
+  public gameID:String
 
-  constructor () {
+  private gameServiceObserver:IGameServiceObserver
 
-    this.players = [new Player1, new Player2]
+  constructor (args: {
+    gameServiceObserver: IGameServiceObserver
+    gameID: String
+    players: IPlayerStub[]
+  }) {
+
+    this.players = []
+    this.initPlayers(args)
+    this.gameServiceObserver = args.gameServiceObserver
+
+    this.gameID = args?.gameID || '0'
     this.game = new Game({
-      players: this.players
+      gameService: this,
+      players: this.players,
     })
   }
+
+    private initPlayers = (args: { players: any[] }) => {
+
+      args?.players?.map((playerstub, idx) => this.players[idx] = new Player(playerstub, idx+1))
+
+    }
+
+  public checkCurrentPlayerByID = (userID:String):Boolean =>
+    userID === this.game.currentPlayer.userID
 
   public dispatchAbility = (
     applyingUnit:ILiveUnit,
@@ -52,22 +85,18 @@ export class GameService implements IGameService {
     recivingUnitID:UnitID,
     recivingUnitIDs:UnitID[]
   ):Boolean => {
-    console.log('callApplyAbility')
     const applyingUnit = this.getUnitbyUnitID(applyingUnitID)
-    // console.log(applyingUnit)
     const unitAbility = applyingUnit.abilities.filter(ability => ability.name === unitAbilityName)[0]
-    // console.log(unitAbility)
     const recivingUnit = this.getUnitbyUnitID(recivingUnitID)
-    // console.log(recivingUnit)
     const recivingUnits = recivingUnitIDs.map(recivingUnitID => this.getUnitbyUnitID(recivingUnitID))
-    // console.log(recivingUnits)
 
-    this.game.applyAbility(
-      applyingUnit,
-      unitAbility,
-      recivingUnit,
-      recivingUnits
-    )
+    if (applyingUnit.life > 0)
+      this.game.applyAbility(
+        applyingUnit,
+        unitAbility,
+        recivingUnit,
+        recivingUnits
+      )
 
     return false
   }
@@ -78,15 +107,15 @@ export class GameService implements IGameService {
   public getUnitbyUnitID = (unitID:UnitID):ILiveUnit =>
     this.game.units.filter(unit => unit.player.id == unitID[0] && unit.id == unitID[1])[0]
 
-  public unitCountByPlayer = ():void => {
-    console.log('unitCountByPlayer')
-    const unitCountByPlayer = this.players.map(player => ({
-      player: player.name,
-      unitCount: this.game.units.filter(unit => unit.player.name == player.name).length,
-      unitlife: this.game.units.map(unit => unit.life)
-    }))
-    console.log(unitCountByPlayer)
-    console.log('currentTurn: ' + this.game.turn)
-  }
+  // public unitCountByPlayer = ():void => {
+  //   this.players.map(player => ({
+  //     player: player.name,
+  //     unitCount: this.game.units.filter(unit => unit.player.name == player.name).length,
+  //     unitlife: this.game.units.map(unit => unit.life)
+  //   }))
+  // }
+
+  public endGame = (winner:IPlayer):void =>
+    this.gameServiceObserver?.endGame(winner)
 
 }
