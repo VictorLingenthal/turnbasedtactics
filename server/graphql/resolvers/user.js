@@ -35,122 +35,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userResolver = void 0;
-var user_model_1 = __importDefault(require("../../models/user.model"));
-var mongoose_1 = __importDefault(require("mongoose"));
 var userService_1 = require("./../../services/userService");
-var uuid_1 = require("uuid");
 var activeUsers = [];
 exports.userResolver = {
     Mutation: {
-        checkAuth: function (__, args) { return __awaiter(void 0, void 0, void 0, function () {
-            var sessionID, auth, userService, userLoggedin;
-            return __generator(this, function (_a) {
-                sessionID = args.sessionID;
-                auth = {
-                    userID: null,
-                    sessionID: null,
-                    message: "Session expired"
-                };
-                if (sessionID) {
-                    userService = userService_1.UserService.getInstance();
-                    userLoggedin = userService.findUserBySessionID(sessionID);
-                    if (userLoggedin) {
-                        auth.userID = userLoggedin.userID;
-                        auth.message = "Welcome back " + userLoggedin.username;
-                    }
-                    else {
-                        console.log('No user with that sessionID');
-                    }
-                }
-                return [2 /*return*/, auth];
-            });
-        }); },
-        login: function (__, args) { return __awaiter(void 0, void 0, void 0, function () {
-            var login, user, userService, newActiveUser;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('login');
-                        login = {
-                            userID: null,
-                            sessionID: null,
-                            message: "No login Message set"
-                        };
-                        if (mongoose_1.default.connection.readyState != 1) {
-                            login.message = "Database Server not connected, please try again later";
-                            return [2 /*return*/, login];
-                        }
-                        return [4 /*yield*/, user_model_1.default.findOne({ username: args.username })];
-                    case 1:
-                        user = _a.sent();
-                        if (!user)
-                            login.message = "No user by that name";
-                        else if (user.password !== args.password)
-                            login.message = "Passwords do not match";
-                        else {
-                            userService = userService_1.UserService.getInstance();
-                            newActiveUser = userService.addUser(user);
-                            if (newActiveUser) {
-                                login.message = newActiveUser.username + " logged in successfully ";
-                                login.userID = newActiveUser.userID;
-                                login.sessionID = newActiveUser.sessionID;
-                            }
-                            else
-                                login.message = args.username + " already logged in";
-                        }
-                        return [2 /*return*/, login];
-                }
-            });
-        }); },
-        register: function (__, args) { return __awaiter(void 0, void 0, void 0, function () {
-            var register, user, newUser;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('register');
-                        register = {
-                            userID: null,
-                            sessionID: null,
-                            message: "No register Message set"
-                        };
-                        if (mongoose_1.default.connection.readyState != 1) {
-                            register.message = "Database Server not connected, please try again later";
-                            return [2 /*return*/, register];
-                        }
-                        return [4 /*yield*/, user_model_1.default.findOne({ username: args.username })];
-                    case 1:
-                        user = _a.sent();
-                        if (!(args.password !== args.confirmPassword)) return [3 /*break*/, 2];
-                        register.message = "Passwords do not match";
-                        return [3 /*break*/, 6];
-                    case 2:
-                        if (!(args.username.length < 3)) return [3 /*break*/, 3];
-                        register.message = "username too short";
-                        return [3 /*break*/, 6];
-                    case 3:
-                        if (!user) return [3 /*break*/, 4];
-                        register.message = "username already taken";
-                        return [3 /*break*/, 6];
-                    case 4:
-                        newUser = new user_model_1.default({
-                            username: args.username,
-                            password: args.password,
-                            userID: uuid_1.v4()
-                        });
-                        return [4 /*yield*/, newUser.save()];
-                    case 5:
-                        _a.sent();
-                        register.message = 'Newuser "' + newUser.username + '" created succesfully!';
-                        register.userID = newUser.userID;
-                        _a.label = 6;
-                    case 6: return [2 /*return*/, register];
-                }
-            });
-        }); },
+        checkAuth: function (__, args) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/, userService_1.UserService.getInstance().checkAuth(args.sessionID)];
+        }); }); },
+        login: function (__, args) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userService_1.UserService.getInstance().loginUser(args)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        }); }); },
+        register: function (__, args) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userService_1.UserService.getInstance().registerUser(args)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        }); }); },
     }
 };
