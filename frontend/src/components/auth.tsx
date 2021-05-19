@@ -11,6 +11,8 @@ let Auth: FC<{
 
   const userService = UserService.getInstance()
 
+  const [awaitResponse, setAwaitResponse] = useState<Boolean>(false)
+
   const [showRegister, setShowRegister] = useState<Boolean>(false)
   const [loginMessage, setLoginMessage] = useState<IloginResult>({
     userID: null,
@@ -54,22 +56,34 @@ let Auth: FC<{
 
   const onSubmit = (e) => {
     e.preventDefault()
+    if (awaitResponse) {
+      setLoginMessage({
+        ...loginMessage,
+        message: "Waiting for Server",
+      })
+      return
+    }
+    setAwaitResponse(true)
     if (!showRegister) {
       userService.login(loginData)
       .then(res =>  {
+        setAwaitResponse(false)
         cookieService.setCookie(CookieNameEnum.SESSIONID, res.login.sessionID, 1)
         setLoginMessage(res.login)
       })
       .catch(err => {
+        setAwaitResponse(false)
         console.log('loginResult Error')
         console.log(err.login)
       })
     } else {
       userService.register(loginData)
-      .then(res =>  {
+      .then(res => {
+        setAwaitResponse(false)
         setLoginMessage(res.register)
       })
       .catch(err => {
+        setAwaitResponse(false)
         console.log('registerResult Error')
         console.log(err.register)
       })
