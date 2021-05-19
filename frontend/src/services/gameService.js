@@ -19,10 +19,7 @@ var GameService = /** @class */ (function () {
             var unitAbility = applyingUnit.abilities.filter(function (ability) { return ability.name === unitAbilityName; })[0];
             var recivingUnit = _this.getUnitbyUnitID(recivingUnitID);
             var recivingUnits = recivingUnitIDs.map(function (recivingUnitID) { return _this.getUnitbyUnitID(recivingUnitID); });
-            if (applyingUnit.life > 0 &&
-                applyingUnit.currentTurnTimeout < 1)
-                return _this.game.applyAbility(applyingUnit, unitAbility, recivingUnit, recivingUnits);
-            return false;
+            return _this.game.applyAbility(applyingUnit, unitAbility, recivingUnit, recivingUnits);
         };
         this.createUnitID = function (unit) {
             return [unit.player.id, unit.id];

@@ -16,9 +16,7 @@ export let Game: FC<{
   const setRoute = props.setRoute
 
   const [rerender, setRerender] = useState(0)
-
   gameService.rerenderView = () => setRerender(rerender+1)
-
   useEffect(() => {},[rerender])
 
   const selectedUnitState = useState(null)

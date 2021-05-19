@@ -23,8 +23,6 @@ export class ClientGameService extends GameService implements IClientGameService
   }
 
   public dispatchAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void => {
-    console.log('this.gameID')
-    console.log(this.gameID)
     apolloClient.mutate({
       variables: {
         gameID: this.gameID,
@@ -61,8 +59,6 @@ export class ClientGameService extends GameService implements IClientGameService
 
   private setUpSubscription = () => {
     const self = this
-    console.log('clientgameService - setUpSubscription')
-    console.log(this.gameID)
     apolloClient.subscribe({
       variables: {
         gameID: this.gameID
@@ -80,8 +76,6 @@ export class ClientGameService extends GameService implements IClientGameService
     }).subscribe({
       next (obj) {
         const args = obj.data.sendTurn
-        console.log('clientgameService')
-        console.log(args)
         self.callApplyAbility(
           args.applyingUnitID,
           args.unitAbilityName,

@@ -31,7 +31,7 @@ export interface IGameService {
     unitAbilityName:String,
     recivingUnit:UnitID,
     recivingUnits:UnitID[]
-  ):Boolean
+  ):boolean
   createUnitID(unit:ILiveUnit):UnitID
   getUnitbyUnitID(unitID:UnitID):ILiveUnit
   endGame(winner:IPlayer):void
@@ -83,24 +83,18 @@ export class GameService implements IGameService {
     unitAbilityName:String,
     recivingUnitID:UnitID,
     recivingUnitIDs:UnitID[]
-  ):Boolean => {
+  ):boolean => {
     const applyingUnit = this.getUnitbyUnitID(applyingUnitID)
     const unitAbility = applyingUnit.abilities.filter(ability => ability.name === unitAbilityName)[0]
     const recivingUnit = this.getUnitbyUnitID(recivingUnitID)
     const recivingUnits = recivingUnitIDs.map(recivingUnitID => this.getUnitbyUnitID(recivingUnitID))
 
-    if (
-      applyingUnit.life > 0 &&
-      applyingUnit.currentTurnTimeout < 1
+    return this.game.applyAbility(
+      applyingUnit,
+      unitAbility,
+      recivingUnit,
+      recivingUnits
     )
-      return this.game.applyAbility(
-        applyingUnit,
-        unitAbility,
-        recivingUnit,
-        recivingUnits
-      )
-
-    return false
   }
 
   public createUnitID = (unit:ILiveUnit):UnitID =>
