@@ -121,8 +121,16 @@ export class UserService implements IUserService {
       })
 
       await newUser.save()
-      register.message =  'Newuser "' + newUser.username+ '" created succesfully!'
-      register.userID = newUser.userID
+
+      const newActiveUser = this.addUser(newUser)
+
+      if (newActiveUser) {
+        register.message =  'Newuser "' + newActiveUser.username+ '" created and logged in succesfully!'
+        register.sessionID = newActiveUser.sessionID
+        register.userID = newActiveUser.userID
+      } else
+        register.message =  'There was a problem with registration'
+      
     }
 
     return register

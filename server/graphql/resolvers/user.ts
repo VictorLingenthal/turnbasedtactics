@@ -1,8 +1,6 @@
 
 import { UserService, IActiveUser } from './../../services/userService'
 
-let activeUsers:IActiveUser[] = []
-
 export const userResolver = {
   Mutation : {
     checkAuth : async (__:any, args:any) =>

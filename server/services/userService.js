@@ -139,7 +139,7 @@ var UserService = /** @class */ (function () {
     };
     UserService.prototype.registerUser = function (args) {
         return __awaiter(this, void 0, void 0, function () {
-            var register, user, newUser;
+            var register, user, newUser, newActiveUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -175,8 +175,14 @@ var UserService = /** @class */ (function () {
                         return [4 /*yield*/, newUser.save()];
                     case 5:
                         _a.sent();
-                        register.message = 'Newuser "' + newUser.username + '" created succesfully!';
-                        register.userID = newUser.userID;
+                        newActiveUser = this.addUser(newUser);
+                        if (newActiveUser) {
+                            register.message = 'Newuser "' + newActiveUser.username + '" created and logged in succesfully!';
+                            register.sessionID = newActiveUser.sessionID;
+                            register.userID = newActiveUser.userID;
+                        }
+                        else
+                            register.message = 'There was a problem with registration';
                         _a.label = 6;
                     case 6: return [2 /*return*/, register];
                 }

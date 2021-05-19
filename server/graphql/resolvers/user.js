@@ -38,7 +38,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userResolver = void 0;
 var userService_1 = require("./../../services/userService");
-var activeUsers = [];
 exports.userResolver = {
     Mutation: {
         checkAuth: function (__, args) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
