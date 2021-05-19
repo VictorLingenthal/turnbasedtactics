@@ -27,7 +27,7 @@ export interface IGame {
   getWinner():IPlayer
 
   getUnitsByPlayer(player:IPlayer):ILiveUnit[]
-  applyAbility(applyingUnit:ILiveUnit, unitability:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void
+  applyAbility(applyingUnit:ILiveUnit, unitability:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):boolean
 }
 
 export class Game implements IGame {
@@ -70,24 +70,34 @@ export class Game implements IGame {
   private filterDeadUnits = (units:ILiveUnit[]):ILiveUnit[] =>
     units.filter(unit => unit.life != 0)
 
-  public applyAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void => {
+  public applyAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):boolean => {
+    if (
+      applyingUnit.currentTurnTimeout > 0 ||
+      applyingUnit.life < 1
+    ) return false
 
     switch (unitAbility.targets[0]) {
       case 'Clicked' : {
         const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits([recivingUnit]))
         this.insertUnits(updatedUnits)
         this.changeTurn()
-        return
+        return true
       }
       case 'All_by_Player' : {
         const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits(recivingUnits))
         this.insertUnits(updatedUnits)
         this.changeTurn()
-        return
+        return true
+      }
+      case 'All_by_Enemy' : {
+        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits(recivingUnits))
+        this.insertUnits(updatedUnits)
+        this.changeTurn()
+        return true
       }
       default: {
         this.changeTurn()
-        return
+        return true
       }
 
     }
@@ -100,10 +110,15 @@ export class Game implements IGame {
     if (this.checkForWinner()) {
       this.gameService?.endGame(this.winner)
     } else {
+      this.changeTurnTimeouts()
       this.switchToNextPlayer()
       this.turn++
     }
   }
+
+  private changeTurnTimeouts = () =>
+    this.getUnitsByPlayer(this.currentPlayer).map(unit =>
+      unit.currentTurnTimeout > 0 ? unit.currentTurnTimeout-- : unit)
 
   private switchToNextPlayer = () => {
     const players_left = this.players.length

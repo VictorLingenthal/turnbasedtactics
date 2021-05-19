@@ -9,7 +9,6 @@ import './scss/unit.scss'
 
 let Unit: FC<{
   unit:ILiveUnit
-  turn:[number,Function]
   gameService: IGameService
   selectedAbilty:[IUnitAbility|null,Function]
   selectedUnit:[ILiveUnit|null,Function]
@@ -20,7 +19,6 @@ let Unit: FC<{
   const unit = props.unit
   const [selectedUnit, setSelectedUnit] = props.selectedUnit
   const [selectedAbilty, setSelectedAbilty] = props.selectedAbilty
-  const [turn, setTurn] = props.turn
 
   const executeAbility = () => {
     console.log('executeAbility')
@@ -39,7 +37,7 @@ let Unit: FC<{
         className={"Unit" + (selectedUnit === unit ? " selectedUnit": "")}
         onClick={e => {
             //Check whose turn it is
-            if (turn%2+1 === unit.player.id && UserService.getInstance().userID === unit.player.userID) {
+            if (gameService.game.turn%2+1 === unit.player.id && UserService.getInstance().userID === unit.player.userID) {
               if (selectedAbilty && selectedAbilty.ability.targets[0] === 'Ally') {
                 executeAbility()
               } else {
@@ -64,6 +62,9 @@ let Unit: FC<{
         <h6>{unit.player.name}</h6>
         {/* }<h6>PlayerID: {unit.player.id}</h6> */}
         <div>Life: <span>{unit.life > 0? unit.life : 0}</span></div>
+        { unit.currentTurnTimeout > 0 &&
+          <div>Wait<span>{unit.currentTurnTimeout}</span>Turns</div>
+        }
 
       </div>
   )

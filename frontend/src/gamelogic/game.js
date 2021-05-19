@@ -28,22 +28,31 @@ var Game = /** @class */ (function () {
             return units.filter(function (unit) { return unit.life != 0; });
         };
         this.applyAbility = function (applyingUnit, unitAbility, recivingUnit, recivingUnits) {
+            if (applyingUnit.currentTurnTimeout > 0 ||
+                applyingUnit.life < 1)
+                return false;
             switch (unitAbility.targets[0]) {
                 case 'Clicked': {
                     var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits([recivingUnit]));
                     _this.insertUnits(updatedUnits);
                     _this.changeTurn();
-                    return;
+                    return true;
                 }
                 case 'All_by_Player': {
                     var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits(recivingUnits));
                     _this.insertUnits(updatedUnits);
                     _this.changeTurn();
-                    return;
+                    return true;
+                }
+                case 'All_by_Enemy': {
+                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits(recivingUnits));
+                    _this.insertUnits(updatedUnits);
+                    _this.changeTurn();
+                    return true;
                 }
                 default: {
                     _this.changeTurn();
-                    return;
+                    return true;
                 }
             }
         };
@@ -56,9 +65,15 @@ var Game = /** @class */ (function () {
                 (_a = _this.gameService) === null || _a === void 0 ? void 0 : _a.endGame(_this.winner);
             }
             else {
+                _this.changeTurnTimeouts();
                 _this.switchToNextPlayer();
                 _this.turn++;
             }
+        };
+        this.changeTurnTimeouts = function () {
+            return _this.getUnitsByPlayer(_this.currentPlayer).map(function (unit) {
+                return unit.currentTurnTimeout > 0 ? unit.currentTurnTimeout-- : unit;
+            });
         };
         this.switchToNextPlayer = function () {
             var players_left = _this.players.length;

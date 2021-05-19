@@ -9,17 +9,17 @@ import { ILiveUnit } from '../gamelogic/liveUnit'
 import { IUnitAbility} from '../gamelogic/unitModels'
 
 export interface IClientGameService extends IGameService {
-  incTurn: Function
+  rerenderView: Function
 }
 
 export class ClientGameService extends GameService implements IClientGameService {
 
-  public incTurn: Function
+  public rerenderView: Function
 
   constructor (args) {
     super(args)
     this.setUpSubscription()
-    this.incTurn = () => {console.log('incTurn() not Set')}
+    this.rerenderView = () => {console.log('rerenderView() not Set')}
   }
 
   public dispatchAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void => {
@@ -88,7 +88,7 @@ export class ClientGameService extends GameService implements IClientGameService
           args.recivingUnitID,
           args.recivingUnitIDs
         )
-        self.incTurn()
+        self.rerenderView()
       }
     })
   }

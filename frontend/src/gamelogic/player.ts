@@ -1,5 +1,5 @@
 
-import { IUnitModel, Knight, Healer } from './unitModels'
+import { IUnitModel, Knight, Witch, Healer } from './unitModels'
 import { ILiveUnit } from './liveUnit'
 
 export interface IPlayerStub {
@@ -29,8 +29,8 @@ export class Player implements IPlayer {
     this.name = playerSetup.username
     this.id = id
     this.userID = playerSetup.userID
-    // this.unitModels = [Knight, Knight, Healer]
-    this.unitModels = [Knight]
+    this.unitModels = [Knight, Witch, Healer]
+    // this.unitModels = [Knight]
     this.units = []
     this.alive = true
   }

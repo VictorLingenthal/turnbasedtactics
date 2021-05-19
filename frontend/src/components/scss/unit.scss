@@ -8,8 +8,10 @@
   @include border;
 
   div {
+    padding: 10px;
     display: flex;
     justify-content: space-between;
+    span {padding: 0 4px}
   }
 }
 .selectedUnit {

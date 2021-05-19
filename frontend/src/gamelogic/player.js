@@ -7,8 +7,8 @@ var Player = /** @class */ (function () {
         this.name = playerSetup.username;
         this.id = id;
         this.userID = playerSetup.userID;
-        // this.unitModels = [Knight, Knight, Healer]
-        this.unitModels = [unitModels_1.Knight];
+        this.unitModels = [unitModels_1.Knight, unitModels_1.Witch, unitModels_1.Healer];
+        // this.unitModels = [Knight]
         this.units = [];
         this.alive = true;
     }

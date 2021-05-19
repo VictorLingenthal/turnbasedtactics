@@ -26,6 +26,7 @@
     @include border;
     .Control {
       display: flex;
+      flex-direction: column;
       flex: 0 0 80px;
       margin: 10px;
       @include border;

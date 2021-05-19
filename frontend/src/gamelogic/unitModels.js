@@ -16,8 +16,8 @@ exports.Knight = {
     maxlife: 40,
     abilities: [{
             name: abilities_1.Attack.name,
-            damage: 10,
-            timeout: 1,
+            damage: 12,
+            turnTimeout: 1,
             targets: ['Clicked'],
             ability: abilities_1.Attack
         }]
@@ -29,17 +29,17 @@ exports.Healer = {
             name: abilities_1.Heal.name,
             damage: 6,
             targets: ['All_by_Player'],
-            timeout: 2,
+            turnTimeout: 3,
             ability: abilities_1.Heal
         }]
 };
 exports.Witch = {
-    name: 'Healer',
-    maxlife: 10,
+    name: 'Witch',
+    maxlife: 20,
     abilities: [{
             name: abilities_1.Burn.name,
             damage: 10,
-            timeout: 3,
+            turnTimeout: 4,
             targets: ['All_by_Enemy'],
             ability: abilities_1.Burn
         }]

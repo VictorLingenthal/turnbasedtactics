@@ -9,6 +9,7 @@ export interface ILiveUnit {
 
   name: string
   maxlife: number
+  currentTurnTimeout: number
   life: number
   abilities: IUnitAbility[]
 }
@@ -20,6 +21,7 @@ export class GameUnit implements ILiveUnit {
 
   public name: string
   public maxlife: number
+  public currentTurnTimeout: number
   public life: number
   public abilities: IUnitAbility[]
 
@@ -30,6 +32,7 @@ export class GameUnit implements ILiveUnit {
 
     this.name = unitModel.name
     this.life = unitModel.maxlife
+    this.currentTurnTimeout = 0
     this.maxlife = unitModel.maxlife
     this.abilities = unitModel.abilities
   }

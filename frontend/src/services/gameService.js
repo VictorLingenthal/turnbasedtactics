@@ -19,8 +19,9 @@ var GameService = /** @class */ (function () {
             var unitAbility = applyingUnit.abilities.filter(function (ability) { return ability.name === unitAbilityName; })[0];
             var recivingUnit = _this.getUnitbyUnitID(recivingUnitID);
             var recivingUnits = recivingUnitIDs.map(function (recivingUnitID) { return _this.getUnitbyUnitID(recivingUnitID); });
-            if (applyingUnit.life > 0)
-                _this.game.applyAbility(applyingUnit, unitAbility, recivingUnit, recivingUnits);
+            if (applyingUnit.life > 0 &&
+                applyingUnit.currentTurnTimeout < 1)
+                return _this.game.applyAbility(applyingUnit, unitAbility, recivingUnit, recivingUnits);
             return false;
         };
         this.createUnitID = function (unit) {
@@ -29,13 +30,6 @@ var GameService = /** @class */ (function () {
         this.getUnitbyUnitID = function (unitID) {
             return _this.game.units.filter(function (unit) { return unit.player.id == unitID[0] && unit.id == unitID[1]; })[0];
         };
-        // public unitCountByPlayer = ():void => {
-        //   this.players.map(player => ({
-        //     player: player.name,
-        //     unitCount: this.game.units.filter(unit => unit.player.name == player.name).length,
-        //     unitlife: this.game.units.map(unit => unit.life)
-        //   }))
-        // }
         this.endGame = function (winner) { var _a; return (_a = _this.gameServiceObserver) === null || _a === void 0 ? void 0 : _a.endGame(winner); };
         this.players = [];
         this.initPlayers(args);

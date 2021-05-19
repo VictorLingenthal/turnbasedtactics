@@ -8,6 +8,7 @@ var GameUnit = /** @class */ (function () {
         console.log('Live unit');
         this.name = unitModel.name;
         this.life = unitModel.maxlife;
+        this.currentTurnTimeout = 0;
         this.maxlife = unitModel.maxlife;
         this.abilities = unitModel.abilities;
     }

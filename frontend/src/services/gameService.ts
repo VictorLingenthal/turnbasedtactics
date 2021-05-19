@@ -34,7 +34,6 @@ export interface IGameService {
   ):Boolean
   createUnitID(unit:ILiveUnit):UnitID
   getUnitbyUnitID(unitID:UnitID):ILiveUnit
-  // unitCountByPlayer():void
   endGame(winner:IPlayer):void
 }
 
@@ -90,8 +89,11 @@ export class GameService implements IGameService {
     const recivingUnit = this.getUnitbyUnitID(recivingUnitID)
     const recivingUnits = recivingUnitIDs.map(recivingUnitID => this.getUnitbyUnitID(recivingUnitID))
 
-    if (applyingUnit.life > 0)
-      this.game.applyAbility(
+    if (
+      applyingUnit.life > 0 &&
+      applyingUnit.currentTurnTimeout < 1
+    )
+      return this.game.applyAbility(
         applyingUnit,
         unitAbility,
         recivingUnit,
@@ -106,14 +108,6 @@ export class GameService implements IGameService {
 
   public getUnitbyUnitID = (unitID:UnitID):ILiveUnit =>
     this.game.units.filter(unit => unit.player.id == unitID[0] && unit.id == unitID[1])[0]
-
-  // public unitCountByPlayer = ():void => {
-  //   this.players.map(player => ({
-  //     player: player.name,
-  //     unitCount: this.game.units.filter(unit => unit.player.name == player.name).length,
-  //     unitlife: this.game.units.map(unit => unit.life)
-  //   }))
-  // }
 
   public endGame = (winner:IPlayer):void =>
     this.gameServiceObserver?.endGame(winner)

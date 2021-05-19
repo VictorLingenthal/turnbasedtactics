@@ -15,20 +15,11 @@ export let Game: FC<{
   const gameService = DisplayedGameService.getInstance().getDisplayedGameService()
   const setRoute = props.setRoute
 
-  const [units, setUnits] = useState(gameService.game?.units);
-  const turnState = useState(gameService.game.turn)
-  const [turn, setTurn] = turnState
-  const [winner, setWinner] = useState<String>(null)
+  const [rerender, setRerender] = useState(0)
 
-  gameService.incTurn = () => setTurn(turn+1)
+  gameService.rerenderView = () => setRerender(rerender+1)
 
-  useEffect(() => {
-    if (turn != gameService.game.turn && gameService.game.winner) {
-      setTurn(turn-1)
-      setWinner(gameService.game.winner.name)
-    }
-    setUnits(gameService.game.units)
-  },[turn])
+  useEffect(() => {},[rerender])
 
   const selectedUnitState = useState(null)
   const [selectedUnit, setSelectedUnit] = selectedUnitState
@@ -39,31 +30,29 @@ export let Game: FC<{
   return (
     <div className="Game">
       <div className="Timer">
-        Timer
-        <span>GameID: {gameService.gameID} - </span>
+        Timer: Todo
       </div>
       <div className="Turn">
 
-        {winner &&
+        {gameService.game.winner &&
           <div>
-            <span>The Game as Ended - The Winner is {winner}</span>
+            <span>The Game as Ended - The Winner is {gameService.game.winner.name}</span>
             <button onClick={(e) =>
               setRoute(routeStates.GAMELIST)
             }>Leave Game</button>
           </div>
         }
 
-        <span>Turn: {turn}</span>
-        {!winner && <span> - CurrentPlayer: {turn%2+1} {gameService.game.currentPlayer.name}</span>}
+        <span>Turn: {gameService.game.turn}</span>
+        {!gameService.game.winner && <span> - CurrentPlayer: {gameService.game.turn%2+1} {gameService.game.currentPlayer.name}</span>}
 
       </div>
       <div className="Battle">
         {
-          units.filter(unit => unit.player.name == gameService.game.players[0].name).map((unit) =>
+          gameService.game.units.filter(unit => unit.player.name == gameService.game.players[0].name).map((unit) =>
             <Unit
               key={unit.id}
               unit={unit}
-              turn={turnState}
               gameService={gameService}
               selectedAbilty={selectedAbilityState}
               selectedUnit={selectedUnitState}
@@ -72,11 +61,10 @@ export let Game: FC<{
         }
         <div className="Divider">vs</div>
         {
-          units.filter(unit => unit.player.name == gameService.game.players[1].name).map((unit) =>
+          gameService.game.units.filter(unit => unit.player.name == gameService.game.players[1].name).map((unit) =>
             <Unit
               key={unit.id}
               unit={unit}
-              turn={turnState}
               gameService={gameService}
               selectedAbilty={selectedAbilityState}
               selectedUnit={selectedUnitState}
@@ -95,6 +83,10 @@ export let Game: FC<{
               }}
             >
             <span>{ability.ability.name}: {ability.damage}</span>
+            {
+              ability.turnTimeout > 1 &&
+              <span>Timeout: {ability.turnTimeout-1}</span>
+            }
             </div>
           )
         }

@@ -5,7 +5,7 @@ export interface IUnitAbility {
   name: string
   damage: number
   ability: IAbility
-  timeout: number
+  turnTimeout: number
   targets: string[],
 }
 
@@ -34,8 +34,8 @@ export const Knight:IUnitModel = {
     maxlife: 40,
     abilities: [{
       name: Attack.name,
-      damage: 10,
-      timeout: 1,
+      damage: 12,
+      turnTimeout: 1,
       targets: ['Clicked'],
       ability: Attack
     }]
@@ -48,18 +48,18 @@ export const Healer:IUnitModel = {
       name: Heal.name,
       damage: 6,
       targets: ['All_by_Player'],
-      timeout: 2,
+      turnTimeout: 3,
       ability: Heal
     }]
 }
 
 export const Witch:IUnitModel = {
-    name: 'Healer',
-    maxlife: 10,
+    name: 'Witch',
+    maxlife: 20,
     abilities: [{
       name: Burn.name,
       damage: 10,
-      timeout: 3,
+      turnTimeout: 4,
       targets: ['All_by_Enemy'],
       ability: Burn
     }]
