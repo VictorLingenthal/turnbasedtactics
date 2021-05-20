@@ -1,6 +1,6 @@
-# BoardDemo
+# Turn Based Tactis
 
-Turn Based Tactics Project
+Turn Based Tactics Game
 
 
 ## Preparation
