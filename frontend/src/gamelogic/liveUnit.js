@@ -5,7 +5,6 @@ var GameUnit = /** @class */ (function () {
     function GameUnit(id, player, unitModel) {
         this.id = id;
         this.player = player;
-        console.log('Live unit');
         this.name = unitModel.name;
         this.life = unitModel.maxlife;
         this.currentTurnTimeout = 0;

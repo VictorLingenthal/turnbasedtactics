@@ -28,7 +28,6 @@ export class GameUnit implements ILiveUnit {
   constructor(id:number, player:IPlayer, unitModel:IUnitModel) {
     this.id = id
     this.player = player
-    console.log('Live unit')
 
     this.name = unitModel.name
     this.life = unitModel.maxlife

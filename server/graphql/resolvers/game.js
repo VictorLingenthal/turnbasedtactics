@@ -24,22 +24,22 @@ exports.gameResolver = {
             var _a;
             var game = serverGameListService_1.ServerGameListService.getInstance().getGameByID(args.gameID);
             if ((_a = game === null || game === void 0 ? void 0 : game.gameService) === null || _a === void 0 ? void 0 : _a.checkCurrentPlayerByID(args.userID)) {
-                game.gameService.callApplyAbility(args.applyingUnitID, args.unitAbilityName, args.recivingUnitID, args.recivingUnitIDs);
+                game.gameService.callApplyAbility(args.applyingUnitID, args.unitAbilityName, args.receivingUnitID, args.receivingUnitIDs);
                 // console.log('Call PubSub Publish')
                 pubSub.publish('SEND_TURN', {
                     sendTurn: {
                         gameID: game.gameID,
                         applyingUnitID: args.applyingUnitID,
                         unitAbilityName: args.unitAbilityName,
-                        recivingUnitID: args.recivingUnitID,
-                        recivingUnitIDs: args.recivingUnitIDs
+                        receivingUnitID: args.receivingUnitID,
+                        receivingUnitIDs: args.receivingUnitIDs
                     }
                 });
             }
             else {
                 console.log("This is not the users turn");
             }
-            return 'applyAbility: ' + args.applyingUnitID + " - " + args.unitAbilityName + " - " + args.recivingUnitID + " - " + args.recivingUnitIDs;
+            return 'applyAbility: ' + args.applyingUnitID + " - " + args.unitAbilityName + " - " + args.receivingUnitID + " - " + args.receivingUnitIDs;
         },
     },
     Subscription: {

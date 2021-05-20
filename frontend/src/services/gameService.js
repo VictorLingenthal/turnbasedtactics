@@ -13,13 +13,13 @@ var GameService = /** @class */ (function () {
         this.checkCurrentPlayerByID = function (userID) {
             return userID === _this.game.currentPlayer.userID;
         };
-        this.dispatchAbility = function (applyingUnit, unitAbility, recivingUnit, recivingUnits) { };
-        this.callApplyAbility = function (applyingUnitID, unitAbilityName, recivingUnitID, recivingUnitIDs) {
+        this.dispatchAbility = function (applyingUnit, unitAbility, receivingUnit, receivingUnits) { };
+        this.callApplyAbility = function (applyingUnitID, unitAbilityName, receivingUnitID, receivingUnitIDs) {
             var applyingUnit = _this.getUnitbyUnitID(applyingUnitID);
             var unitAbility = applyingUnit.abilities.filter(function (ability) { return ability.name === unitAbilityName; })[0];
-            var recivingUnit = _this.getUnitbyUnitID(recivingUnitID);
-            var recivingUnits = recivingUnitIDs.map(function (recivingUnitID) { return _this.getUnitbyUnitID(recivingUnitID); });
-            return _this.game.applyAbility(applyingUnit, unitAbility, recivingUnit, recivingUnits);
+            var receivingUnit = _this.getUnitbyUnitID(receivingUnitID);
+            var receivingUnits = receivingUnitIDs.map(function (receivingUnitID) { return _this.getUnitbyUnitID(receivingUnitID); });
+            return _this.game.applyAbility(applyingUnit, unitAbility, receivingUnit, receivingUnits);
         };
         this.createUnitID = function (unit) {
             return [unit.player.id, unit.id];

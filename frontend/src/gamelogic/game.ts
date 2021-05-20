@@ -27,7 +27,7 @@ export interface IGame {
   getWinner():IPlayer
 
   getUnitsByPlayer(player:IPlayer):ILiveUnit[]
-  applyAbility(applyingUnit:ILiveUnit, unitability:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):boolean
+  applyAbility(applyingUnit:ILiveUnit, unitability:IUnitAbility, receivingUnit:ILiveUnit, receivingUnits:ILiveUnit[]):boolean
 }
 
 export class Game implements IGame {
@@ -70,7 +70,7 @@ export class Game implements IGame {
   private filterDeadUnits = (units:ILiveUnit[]):ILiveUnit[] =>
     units.filter(unit => unit.life != 0)
 
-  public applyAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):boolean => {
+  public applyAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, receivingUnit:ILiveUnit, receivingUnits:ILiveUnit[]):boolean => {
     if (
       applyingUnit.currentTurnTimeout > 0 ||
       applyingUnit.life < 1
@@ -78,19 +78,19 @@ export class Game implements IGame {
 
     switch (unitAbility.targets[0]) {
       case 'Clicked' : {
-        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits([recivingUnit]))
+        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits([receivingUnit]))
         this.insertUnits(updatedUnits)
         this.changeTurn()
         return true
       }
       case 'All_by_Player' : {
-        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits(recivingUnits))
+        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits(receivingUnits))
         this.insertUnits(updatedUnits)
         this.changeTurn()
         return true
       }
       case 'All_by_Enemy' : {
-        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits(recivingUnits))
+        const updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, this.filterDeadUnits(receivingUnits))
         this.insertUnits(updatedUnits)
         this.changeTurn()
         return true

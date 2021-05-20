@@ -27,25 +27,25 @@ var Game = /** @class */ (function () {
         this.filterDeadUnits = function (units) {
             return units.filter(function (unit) { return unit.life != 0; });
         };
-        this.applyAbility = function (applyingUnit, unitAbility, recivingUnit, recivingUnits) {
+        this.applyAbility = function (applyingUnit, unitAbility, receivingUnit, receivingUnits) {
             if (applyingUnit.currentTurnTimeout > 0 ||
                 applyingUnit.life < 1)
                 return false;
             switch (unitAbility.targets[0]) {
                 case 'Clicked': {
-                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits([recivingUnit]));
+                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits([receivingUnit]));
                     _this.insertUnits(updatedUnits);
                     _this.changeTurn();
                     return true;
                 }
                 case 'All_by_Player': {
-                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits(recivingUnits));
+                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits(receivingUnits));
                     _this.insertUnits(updatedUnits);
                     _this.changeTurn();
                     return true;
                 }
                 case 'All_by_Enemy': {
-                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits(recivingUnits));
+                    var updatedUnits = unitAbility.ability.apply(applyingUnit, unitAbility, _this.filterDeadUnits(receivingUnits));
                     _this.insertUnits(updatedUnits);
                     _this.changeTurn();
                     return true;

@@ -23,14 +23,14 @@ export interface IGameService {
   dispatchAbility(
     applyingUnit:ILiveUnit,
     unitAbility:IUnitAbility,
-    recivingUnit:ILiveUnit,
-    recivingUnits:ILiveUnit[]
+    receivingUnit:ILiveUnit,
+    receivingUnits:ILiveUnit[]
   ):void
   callApplyAbility(
     applyingUnitID:UnitID,
     unitAbilityName:String,
-    recivingUnit:UnitID,
-    recivingUnits:UnitID[]
+    receivingUnit:UnitID,
+    receivingUnits:UnitID[]
   ):boolean
   createUnitID(unit:ILiveUnit):UnitID
   getUnitbyUnitID(unitID:UnitID):ILiveUnit
@@ -74,26 +74,26 @@ export class GameService implements IGameService {
   public dispatchAbility = (
     applyingUnit:ILiveUnit,
     unitAbility:IUnitAbility,
-    recivingUnit:ILiveUnit,
-    recivingUnits:ILiveUnit[]
+    receivingUnit:ILiveUnit,
+    receivingUnits:ILiveUnit[]
   ):void => {}
 
   public callApplyAbility = (
     applyingUnitID:UnitID,
     unitAbilityName:String,
-    recivingUnitID:UnitID,
-    recivingUnitIDs:UnitID[]
+    receivingUnitID:UnitID,
+    receivingUnitIDs:UnitID[]
   ):boolean => {
     const applyingUnit = this.getUnitbyUnitID(applyingUnitID)
     const unitAbility = applyingUnit.abilities.filter(ability => ability.name === unitAbilityName)[0]
-    const recivingUnit = this.getUnitbyUnitID(recivingUnitID)
-    const recivingUnits = recivingUnitIDs.map(recivingUnitID => this.getUnitbyUnitID(recivingUnitID))
+    const receivingUnit = this.getUnitbyUnitID(receivingUnitID)
+    const receivingUnits = receivingUnitIDs.map(receivingUnitID => this.getUnitbyUnitID(receivingUnitID))
 
     return this.game.applyAbility(
       applyingUnit,
       unitAbility,
-      recivingUnit,
-      recivingUnits
+      receivingUnit,
+      receivingUnits
     )
   }
 

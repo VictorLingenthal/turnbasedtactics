@@ -4,7 +4,7 @@ import { IUnitAbility } from '../gamelogic/unitModels'
 import { ILiveUnit } from '../gamelogic/liveUnit'
 import { IGameService } from '../services/gameService'
 import { UserService } from '../services/userService'
-
+import { AbilityTargetsEnum } from '../model/abilityTargets.model'
 import './scss/unit.scss'
 
 let Unit: FC<{
@@ -38,18 +38,21 @@ let Unit: FC<{
         onClick={e => {
             //Check whose turn it is
             if (gameService.game.turn%2+1 === unit.player.id && UserService.getInstance().userID === unit.player.userID) {
-              if (selectedAbilty && selectedAbilty.ability.targets[0] === 'Ally') {
+              if (selectedAbilty && selectedAbilty.ability.targets[0] === AbilityTargetsEnum.ALLY) {
                 executeAbility()
               } else {
                 if (selectedUnit === null || unit.player.id === selectedUnit.player.id) {
-                  setSelectedUnit((selectedUnit !== unit && unit.life > 0 ) ? unit : null)
-                  setSelectedAbilty(null)
-                }
-                else console.log('no ability selected')
+                  if (unit.currentTurnTimeout > 0) {
+                    console.log('This Unit is waiting')
+                  } else {
+                    setSelectedUnit((selectedUnit !== unit && unit.life > 0 ) ? unit : null)
+                    setSelectedAbilty(null)
+                  }
+                } else console.log('no ability selected')
               }
             } else {
               if (selectedUnit) {
-                if (selectedAbilty && selectedAbilty.ability.targets[0] === 'Enemy') {
+                if (selectedAbilty && selectedAbilty.ability.targets[0] === AbilityTargetsEnum.ENEMY) {
                   executeAbility()
                 } else console.log("Can't apply to enemy")
               } else console.log("It's not your unit")

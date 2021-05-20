@@ -17,8 +17,8 @@ export const gameDefs = gql`
   type changeTurnInfo {
     applyingUnitID: [ID]
     unitAbilityName: String
-    recivingUnitID: [ID]
-    recivingUnitIDs:[[ID]]
+    receivingUnitID: [ID]
+    receivingUnitIDs:[[ID]]
   }
 
   extend type Mutation {
@@ -28,8 +28,8 @@ export const gameDefs = gql`
       userID: ID
       applyingUnitID: [ID]
       unitAbilityName: String
-      recivingUnitID: [ID]
-      recivingUnitIDs:[[ID]]
+      receivingUnitID: [ID]
+      receivingUnitIDs:[[ID]]
     ):String
 
   }

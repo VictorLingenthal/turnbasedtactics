@@ -22,15 +22,15 @@ export class ClientGameService extends GameService implements IClientGameService
     this.rerenderView = () => {console.log('rerenderView() not Set')}
   }
 
-  public dispatchAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, recivingUnit:ILiveUnit, recivingUnits:ILiveUnit[]):void => {
+  public dispatchAbility = (applyingUnit:ILiveUnit, unitAbility:IUnitAbility, receivingUnit:ILiveUnit, receivingUnits:ILiveUnit[]):void => {
     apolloClient.mutate({
       variables: {
         gameID: this.gameID,
         userID: UserService.getInstance().userID,
         applyingUnitID: this.createUnitID(applyingUnit),
         unitAbilityName: unitAbility.ability.name,
-        recivingUnitID: this.createUnitID(recivingUnit),
-        recivingUnitIDs: recivingUnits.map(unit => this.createUnitID(unit))
+        receivingUnitID: this.createUnitID(receivingUnit),
+        receivingUnitIDs: receivingUnits.map(unit => this.createUnitID(unit))
       },
       mutation: gql`
         mutation ApplyAbility(
@@ -38,16 +38,16 @@ export class ClientGameService extends GameService implements IClientGameService
           $userID: ID,
           $applyingUnitID: [ID],
           $unitAbilityName: String,
-          $recivingUnitID: [ID],
-          $recivingUnitIDs: [[ID]]
+          $receivingUnitID: [ID],
+          $receivingUnitIDs: [[ID]]
         ) {
           applyAbility(
             gameID: $gameID,
             userID: $userID,
             applyingUnitID: $applyingUnitID,
             unitAbilityName: $unitAbilityName,
-            recivingUnitID: $recivingUnitID,
-            recivingUnitIDs: $recivingUnitIDs
+            receivingUnitID: $receivingUnitID,
+            receivingUnitIDs: $receivingUnitIDs
           )
         }
       `
@@ -68,8 +68,8 @@ export class ClientGameService extends GameService implements IClientGameService
           sendTurn (gameID: $gameID) {
             applyingUnitID
             unitAbilityName
-            recivingUnitID
-            recivingUnitIDs
+            receivingUnitID
+            receivingUnitIDs
           }
         }
         `,
@@ -79,8 +79,8 @@ export class ClientGameService extends GameService implements IClientGameService
         self.callApplyAbility(
           args.applyingUnitID,
           args.unitAbilityName,
-          args.recivingUnitID,
-          args.recivingUnitIDs
+          args.receivingUnitID,
+          args.receivingUnitIDs
         )
         self.rerenderView()
       }

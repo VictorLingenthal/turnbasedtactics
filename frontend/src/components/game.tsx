@@ -47,7 +47,7 @@ export let Game: FC<{
       </div>
       <div className="Battle">
         {
-          gameService.game.units.filter(unit => unit.player.name == gameService.game.players[0].name).map((unit) =>
+          gameService.game.units.filter(unit => unit.player.name == gameService.game.players[0].name).reverse().map((unit) =>
             <Unit
               key={unit.id}
               unit={unit}

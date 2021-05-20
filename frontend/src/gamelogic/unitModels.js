@@ -27,7 +27,7 @@ exports.Healer = {
     maxlife: 20,
     abilities: [{
             name: abilities_1.Heal.name,
-            damage: 6,
+            damage: -6,
             targets: ['All_by_Player'],
             turnTimeout: 3,
             ability: abilities_1.Heal

@@ -41,8 +41,8 @@ export const gameResolver = {
         game.gameService.callApplyAbility(
           args.applyingUnitID,
           args.unitAbilityName,
-          args.recivingUnitID,
-          args.recivingUnitIDs
+          args.receivingUnitID,
+          args.receivingUnitIDs
         )
 
         // console.log('Call PubSub Publish')
@@ -51,15 +51,15 @@ export const gameResolver = {
             gameID: game.gameID,
             applyingUnitID: args.applyingUnitID,
             unitAbilityName: args.unitAbilityName,
-            recivingUnitID: args.recivingUnitID,
-            recivingUnitIDs: args.recivingUnitIDs
+            receivingUnitID: args.receivingUnitID,
+            receivingUnitIDs: args.receivingUnitIDs
           }
         });
       } else {
         console.log("This is not the users turn")
       }
 
-      return 'applyAbility: ' + args.applyingUnitID + " - " + args.unitAbilityName + " - " + args.recivingUnitID + " - " + args.recivingUnitIDs
+      return 'applyAbility: ' + args.applyingUnitID + " - " + args.unitAbilityName + " - " + args.receivingUnitID + " - " + args.receivingUnitIDs
     },
   },
   Subscription: {

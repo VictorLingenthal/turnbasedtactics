@@ -46,7 +46,7 @@ export const Healer:IUnitModel = {
     maxlife: 20,
     abilities: [{
       name: Heal.name,
-      damage: 6,
+      damage: -6,
       targets: ['All_by_Player'],
       turnTimeout: 3,
       ability: Heal
