@@ -50,6 +50,7 @@ exports.UserService = void 0;
 var uuid_1 = require("uuid");
 var user_model_1 = __importDefault(require("../models/user.model"));
 var mongoose_1 = __importDefault(require("mongoose"));
+var object_hash_1 = __importDefault(require("object-hash"));
 var UserService = /** @class */ (function () {
     function UserService() {
         var _this = this;
@@ -120,7 +121,7 @@ var UserService = /** @class */ (function () {
                         user = _a.sent();
                         if (!user)
                             login.message = "No user by that name";
-                        else if (user.password !== args.password)
+                        else if (user.password !== object_hash_1.default(args.password))
                             login.message = "Passwords do not match";
                         else {
                             newActiveUser = this.addUser(user);
@@ -169,7 +170,7 @@ var UserService = /** @class */ (function () {
                     case 4:
                         newUser = new user_model_1.default({
                             username: args.username,
-                            password: args.password,
+                            password: object_hash_1.default(args.password),
                             userID: uuid_1.v4()
                         });
                         return [4 /*yield*/, newUser.save()];

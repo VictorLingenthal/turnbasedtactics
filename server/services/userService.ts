@@ -2,6 +2,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import User, { IDBUser } from '../models/user.model'
 import mongoose from "mongoose"
+import hash  from 'object-hash'
 
 import { IloginResult } from '../../frontend/src/interfaces/loginResult'
 
@@ -72,7 +73,7 @@ export class UserService implements IUserService {
    if (!user)
      login.message = "No user by that name"
 
-   else if (user.password !== args.password)
+   else if (user.password !== hash(args.password))
      login.message = "Passwords do not match"
 
    else {
@@ -116,7 +117,7 @@ export class UserService implements IUserService {
     else {
       const newUser:IDBUser = new User({
         username: args.username,
-        password: args.password,
+        password: hash(args.password),
         userID: uuidv4()
       })
 
@@ -130,7 +131,7 @@ export class UserService implements IUserService {
         register.userID = newActiveUser.userID
       } else
         register.message =  'There was a problem with registration'
-      
+
     }
 
     return register

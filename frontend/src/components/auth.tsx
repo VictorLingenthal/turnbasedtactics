@@ -80,6 +80,7 @@ let Auth: FC<{
       userService.register(loginData)
       .then(res => {
         setAwaitResponse(false)
+        cookieService.setCookie(CookieNameEnum.SESSIONID, res.register.sessionID, 1)
         setLoginMessage(res.register)
       })
       .catch(err => {

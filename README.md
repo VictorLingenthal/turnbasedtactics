@@ -14,9 +14,9 @@ Turn Based Tactics Project
 
 ## Development
 `
-npm run dev
-npm run watch
-/frontend npm run watch
+- npm run dev
+- npm run watch
+- /frontend npm run watch
 `
 
 ## Todos

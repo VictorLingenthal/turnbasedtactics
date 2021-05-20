@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 
 import { IUnitAbility } from '../gamelogic/unitModels'
 import { ILiveUnit } from '../gamelogic/liveUnit'
@@ -7,7 +7,7 @@ import { UserService } from '../services/userService'
 import { AbilityTargetsEnum } from '../model/abilityTargets.model'
 import './scss/unit.scss'
 
-let Unit: FC<{
+export let Unit: FC<{
   unit:ILiveUnit
   gameService: IGameService
   selectedAbilty:[IUnitAbility|null,Function]
@@ -72,6 +72,3 @@ let Unit: FC<{
       </div>
   )
 }
-
-
-export default Unit

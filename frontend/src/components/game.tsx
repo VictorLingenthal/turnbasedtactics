@@ -4,7 +4,7 @@ import { FC, useState, useEffect, Dispatch, SetStateAction } from 'react'
 import './scss/game.scss'
 
 import { IUnitAbility } from '../gamelogic/unitModels'
-import Unit from './unit'
+import { Unit } from './unit'
 import { DisplayedGameService } from '../services/displayedGameService'
 import { routeStates } from '../model/routeStates.model'
 
