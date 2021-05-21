@@ -1,5 +1,5 @@
 import express from 'express'
-import { ApolloServer, gql } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import { PubSub } from 'apollo-server'
 
 import mongoose from "mongoose"
@@ -32,7 +32,6 @@ const server = new ApolloServer({
 });
 const app = express();
 app.use(express.static(__dirname + "/frontend/build"))
-// app.use('/',express.static(__dirname + "/frontend/build"))
 
 server.applyMiddleware({ app });
 const httpServer = createServer(app);

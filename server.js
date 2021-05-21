@@ -31,7 +31,6 @@ var server = new apollo_server_express_1.ApolloServer({
 });
 var app = express_1.default();
 app.use(express_1.default.static(__dirname + "/frontend/build"));
-// app.use('/',express.static(__dirname + "/frontend/build"))
 server.applyMiddleware({ app: app });
 var httpServer = http_1.createServer(app);
 server.installSubscriptionHandlers(httpServer);
