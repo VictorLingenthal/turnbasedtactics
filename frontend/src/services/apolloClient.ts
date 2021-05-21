@@ -4,11 +4,13 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from 'apollo-utilities';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4444/graphql'
+  // uri: 'http://localhost:4444/graphql'
+  uri: 'http://' + document.location.host + '/graphql'
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4444/graphql',
+  // uri: 'ws://localhost:4444/graphql',
+  uri: 'ws://' + document.location.host + '/graphql',
   options: {
     reconnect: true
   }
@@ -34,7 +36,8 @@ const splitLink = split(
 // Instantiate client
 export const apolloClient = new ApolloClient({
   link: splitLink,
-  uri: "http://localhost:4444/graphql",
+  // uri: "http://localhost:4444/graphql",
+  uri: "http://" + document.location.host+ "/graphql",
   // uri: "/graphql",
   cache: new InMemoryCache()
 })
