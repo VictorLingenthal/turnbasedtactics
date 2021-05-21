@@ -7,7 +7,7 @@ import { IUnitAbility} from '../gamelogic/unitModels'
 export type UnitID = [number:number,number:number]
 
 export interface IGameServiceConstructor {
-  gameID?: String
+  gameID?: string
   players?: IPlayerStub
 }
 
@@ -18,8 +18,8 @@ export interface IGameServiceObserver {
 export interface IGameService {
   players: IPlayer[]
   game: IGame
-  gameID:String
-  checkCurrentPlayerByID(userID:String):Boolean
+  gameID:string
+  checkCurrentPlayerByID(userID:string):Boolean
   dispatchAbility(
     applyingUnit:ILiveUnit,
     unitAbility:IUnitAbility,
@@ -28,7 +28,7 @@ export interface IGameService {
   ):void
   callApplyAbility(
     applyingUnitID:UnitID,
-    unitAbilityName:String,
+    unitAbilityName:string,
     receivingUnit:UnitID,
     receivingUnits:UnitID[]
   ):boolean
@@ -41,13 +41,13 @@ export class GameService implements IGameService {
 
   public players:IPlayer[]
   public game:IGame
-  public gameID:String
+  public gameID:string
 
   private gameServiceObserver:IGameServiceObserver
 
   constructor (args: {
     gameServiceObserver: IGameServiceObserver
-    gameID: String
+    gameID: string
     players: IPlayerStub[]
   }) {
 
@@ -68,7 +68,7 @@ export class GameService implements IGameService {
 
     }
 
-  public checkCurrentPlayerByID = (userID:String):Boolean =>
+  public checkCurrentPlayerByID = (userID:string):Boolean =>
     userID === this.game.currentPlayer.userID
 
   public dispatchAbility = (
@@ -80,7 +80,7 @@ export class GameService implements IGameService {
 
   public callApplyAbility = (
     applyingUnitID:UnitID,
-    unitAbilityName:String,
+    unitAbilityName:string,
     receivingUnitID:UnitID,
     receivingUnitIDs:UnitID[]
   ):boolean => {

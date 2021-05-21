@@ -12,7 +12,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addName(name:String):String
+    addName(name: String): String
   }
 
   ${authDefs}

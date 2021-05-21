@@ -9,9 +9,9 @@ import { v4 as uuidv4 } from 'uuid'
 export interface IServerGameListService {
   activeGames:IActiveGame[]
   getGameList():IGameData[]
-  getGameByID(id:String):IActiveGame
+  getGameByID(id:string):IActiveGame
   startGame(user:IActiveUser):IActiveGame
-  joinGame(id:String, user:String):IActiveGame|null
+  joinGame(id:string, user:string):IActiveGame|null
 }
 
 export class ServerGameListService implements IServerGameListService {
@@ -32,7 +32,7 @@ export class ServerGameListService implements IServerGameListService {
 
   public getGameList = () => this.activeGames
 
-  public getGameByID = (id:String) => {
+  public getGameByID = (id:string) => {
     return this.activeGames.filter(
       game => game.gameID === id
     )[0]
@@ -46,7 +46,7 @@ export class ServerGameListService implements IServerGameListService {
     return newgame
   }
 
-  public joinGame = (gameID:String, userID:String) => {
+  public joinGame = (gameID:string, userID:string) => {
 
     const userService = UserService.getInstance()
     const user = userService.findUserByUserID(userID)

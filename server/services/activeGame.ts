@@ -9,9 +9,9 @@ import { IPlayer } from '../../frontend/src/gamelogic/player'
 import { GameStateEnum } from '../../frontend/src/model/gameStates.model'
 
 export interface IGameData {
-  gameID:String
-  gameName:String
-  playerNames?:String[]
+  gameID:string
+  gameName:string
+  playerNames?:string[]
   gameState:GameStateEnum
 }
 
@@ -21,18 +21,18 @@ export interface IActiveGame extends IGameData {
   join(user:IActiveUser):IActiveGame|null
   gameService:IServerGameService|null
   endGame(winner:IPlayer):void
-  publish_update(startNewGame?:Boolean):void
+  publish_update(startNewGame?:boolean):void
 }
 
 export class ActiveGame implements IActiveGame {
 
-  public gameID:String
-  public gameName:String
+  public gameID:string
+  public gameName:string
   public players:IActiveUser[]
   public gameState:GameStateEnum
   public gameService:IServerGameService|null
 
-  constructor(initialUser:IActiveUser, gameID:String) {
+  constructor(initialUser:IActiveUser, gameID:string) {
     this.gameID = gameID
     this.gameName = initialUser.username
     this.players = [initialUser]
@@ -71,7 +71,7 @@ export class ActiveGame implements IActiveGame {
     this.publish_update()
   }
 
-  public publish_update = (startNewGame?:Boolean) =>
+  public publish_update = (startNewGame?:boolean) =>
     pubSub.publish('UPDATE_GAMELIST', {
       updateGameList: {
         startNewGame: startNewGame ? startNewGame : false,

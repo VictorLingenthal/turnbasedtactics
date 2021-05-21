@@ -18,7 +18,7 @@ export const gameDefs = gql`
     applyingUnitID: [ID]
     unitAbilityName: String
     receivingUnitID: [ID]
-    receivingUnitIDs:[[ID]]
+    receivingUnitIDs: [[ID]]
   }
 
   extend type Mutation {
@@ -29,8 +29,8 @@ export const gameDefs = gql`
       applyingUnitID: [ID]
       unitAbilityName: String
       receivingUnitID: [ID]
-      receivingUnitIDs:[[ID]]
-    ):String
+      receivingUnitIDs: [[ID]]
+    ): String
 
   }
 

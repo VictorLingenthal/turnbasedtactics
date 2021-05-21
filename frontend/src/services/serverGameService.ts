@@ -12,7 +12,7 @@ export class ServerGameService extends GameService implements IServerGameService
 
   constructor (args: {
     gameServiceObserver: IGameServiceObserver
-    gameID: String
+    gameID: string
     players: IPlayerStub[]
   }) {
     super(args)

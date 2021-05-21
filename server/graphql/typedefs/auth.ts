@@ -12,18 +12,18 @@ export const authDefs = gql`
 
     checkAuth(
       sessionID: String
-    ):LoginSuccess
+    ): LoginSuccess
 
     login(
       username: String
       password: String
-    ):LoginSuccess
+    ): LoginSuccess
 
     register(
       username: String
       password: String
       confirmPassword: String
-    ):LoginSuccess
+    ): LoginSuccess
 
   }
 

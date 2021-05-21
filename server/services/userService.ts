@@ -15,10 +15,10 @@ export interface IActiveUser {
 
 export interface IUserService {
   activeUsers:IActiveUser[]
-  checkAuth(sessionID:String):IloginResult
+  checkAuth(sessionID:string):IloginResult
   loginUser(args:any):Promise<IloginResult>
   registerUser(args:any):Promise<IloginResult>
-  findUserByUserID(userID:String):IActiveUser|undefined
+  findUserByUserID(userID:string):IActiveUser|undefined
 }
 
 export class UserService implements IUserService {
@@ -37,7 +37,7 @@ export class UserService implements IUserService {
     return UserService.instance
   }
 
-  public checkAuth = (sessionID:String) => {
+  public checkAuth = (sessionID:string) => {
     const auth:IloginResult = {
       userID: null,
       sessionID: null,
@@ -138,13 +138,13 @@ export class UserService implements IUserService {
 
   }
 
-  private findUserBySessionID = (sessionID:String) =>
+  private findUserBySessionID = (sessionID:string) =>
     this.activeUsers.filter(activeUser => activeUser.sessionID === sessionID)[0]
 
-  public findUserByUserID = (userID:String) =>
+  public findUserByUserID = (userID:string) =>
     this.activeUsers.filter(activeUser => activeUser.userID === userID)[0]
 
-  private findUserByUsername = (username:String) =>
+  private findUserByUsername = (username:string) =>
     this.activeUsers.filter(activeUser => activeUser.username === username)[0]
 
   private addUser = (dbUser:IDBUser) => {

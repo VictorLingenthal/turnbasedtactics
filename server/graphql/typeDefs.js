@@ -9,5 +9,5 @@ var apollo_server_express_1 = require("apollo-server-express");
 var auth_1 = require("./typedefs/auth");
 var game_1 = require("./typedefs/game");
 var gameList_1 = require("./typedefs/gameList");
-exports.typeDefs = apollo_server_express_1.gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n\n  type Query {\n    name: String\n    units: [Unit]\n  }\n\n  type Mutation {\n    addName(name:String):String\n  }\n\n  ", "\n  ", "\n  ", "\n\n\n"], ["\n\n  type Query {\n    name: String\n    units: [Unit]\n  }\n\n  type Mutation {\n    addName(name:String):String\n  }\n\n  ", "\n  ", "\n  ", "\n\n\n"])), auth_1.authDefs, game_1.gameDefs, gameList_1.gameListDefs);
+exports.typeDefs = apollo_server_express_1.gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n\n  type Query {\n    name: String\n    units: [Unit]\n  }\n\n  type Mutation {\n    addName(name: String): String\n  }\n\n  ", "\n  ", "\n  ", "\n\n\n"], ["\n\n  type Query {\n    name: String\n    units: [Unit]\n  }\n\n  type Mutation {\n    addName(name: String): String\n  }\n\n  ", "\n  ", "\n  ", "\n\n\n"])), auth_1.authDefs, game_1.gameDefs, gameList_1.gameListDefs);
 var templateObject_1;

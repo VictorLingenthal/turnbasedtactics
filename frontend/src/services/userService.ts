@@ -4,14 +4,14 @@ import { apolloClient } from './apolloClient'
 import { cookieService, CookieNameEnum } from './cookieService'
 
 export interface ILoginData {
-  username: String
-  password: String
-  confirmPassword: String
+  username:string
+  password:string
+  confirmPassword:string
 }
 
 export interface IUserService {
-  userID:String
-  sessionID:String
+  userID:string
+  sessionID:string
   login(loginData:ILoginData):Promise<any>
   register(loginData:ILoginData):Promise<any>
   checkAuth():Promise<any>
@@ -19,8 +19,8 @@ export interface IUserService {
 
 export class UserService implements IUserService {
 
-  public userID: String
-  public sessionID: String
+  public userID:string
+  public sessionID:string
   private static instance: IUserService
 
   private constructor () {
