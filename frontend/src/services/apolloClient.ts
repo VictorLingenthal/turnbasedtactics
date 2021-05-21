@@ -3,12 +3,9 @@ import { ApolloClient, InMemoryCache, HttpLink, split, gql } from '@apollo/clien
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from 'apollo-utilities';
 
-console.log('ApolloClient - test')
-console.log(document.location.host)
-
 const httpLink = new HttpLink({
   // uri: 'http://localhost:4444/graphql'
-  uri: 'http://' + document.location.host + '/graphql'
+  uri: (document.location.protocol === 'https:' ? 'https' : 'http') + '://' + document.location.host + '/graphql'
 });
 
 const wsLink = new WebSocketLink({
@@ -40,7 +37,7 @@ const splitLink = split(
 export const apolloClient = new ApolloClient({
   link: splitLink,
   // uri: "http://localhost:4444/graphql",
-  uri: "http://" + document.location.host+ "/graphql",
+  uri: (document.location.protocol === 'https:' ? 'https' : 'http') + "://" + document.location.host+ "/graphql",
   // uri: "/graphql",
   cache: new InMemoryCache()
 })
