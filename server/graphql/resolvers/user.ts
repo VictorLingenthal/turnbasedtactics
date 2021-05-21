@@ -1,5 +1,5 @@
 
-import { UserService, IActiveUser } from './../../services/userService'
+import { UserService } from './../../services/userService'
 
 export const userResolver = {
   Mutation : {

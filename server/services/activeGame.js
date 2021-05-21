@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ActiveGame = void 0;
-var graphql_redis_subscriptions_1 = require("graphql-redis-subscriptions");
-var pubSub = new graphql_redis_subscriptions_1.RedisPubSub();
+// import { RedisPubSub } from 'graphql-redis-subscriptions';
+// const pubSub = new RedisPubSub();
+var redisclient_1 = require("../../frontend/src/services/redisclient");
 var serverGameService_1 = require("../../frontend/src/services/serverGameService");
 var gameStates_model_1 = require("../../frontend/src/model/gameStates.model");
 var ActiveGame = /** @class */ (function () {
@@ -35,7 +36,7 @@ var ActiveGame = /** @class */ (function () {
             _this.publish_update();
         };
         this.publish_update = function (startNewGame) {
-            return pubSub.publish('UPDATE_GAMELIST', {
+            return redisclient_1.pubSub.publish('UPDATE_GAMELIST', {
                 updateGameList: {
                     startNewGame: startNewGame ? startNewGame : false,
                     gameName: _this.gameName,

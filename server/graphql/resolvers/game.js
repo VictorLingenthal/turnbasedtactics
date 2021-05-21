@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.gameResolver = void 0;
 var apollo_server_1 = require("apollo-server");
-var graphql_redis_subscriptions_1 = require("graphql-redis-subscriptions");
-var pubSub = new graphql_redis_subscriptions_1.RedisPubSub();
+var redisclient_1 = require("../../../frontend/src/services/redisclient");
+// import { RedisPubSub } from 'graphql-redis-subscriptions';
+// const pubSub = new RedisPubSub();
 var serverGameListService_1 = require("../../services/serverGameListService");
 exports.gameResolver = {
     Query: {
@@ -26,7 +27,7 @@ exports.gameResolver = {
             if ((_a = game === null || game === void 0 ? void 0 : game.gameService) === null || _a === void 0 ? void 0 : _a.checkCurrentPlayerByID(args.userID)) {
                 game.gameService.callApplyAbility(args.applyingUnitID, args.unitAbilityName, args.receivingUnitID, args.receivingUnitIDs);
                 // console.log('Call PubSub Publish')
-                pubSub.publish('SEND_TURN', {
+                redisclient_1.pubSub.publish('SEND_TURN', {
                     sendTurn: {
                         gameID: game.gameID,
                         applyingUnitID: args.applyingUnitID,
@@ -45,7 +46,7 @@ exports.gameResolver = {
     Subscription: {
         sendTurn: {
             subscribe: apollo_server_1.withFilter(function (_, __) {
-                return pubSub.asyncIterator('SEND_TURN');
+                return redisclient_1.pubSub.asyncIterator('SEND_TURN');
             }, function (payload, variables) {
                 return payload.sendTurn.gameID === variables.gameID;
             })

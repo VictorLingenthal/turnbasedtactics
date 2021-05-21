@@ -1,8 +1,9 @@
 "use strict";
+// import { RedisPubSub } from 'graphql-redis-subscriptions';
+// const pubSub = new RedisPubSub();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.gameListResolver = void 0;
-var graphql_redis_subscriptions_1 = require("graphql-redis-subscriptions");
-var pubSub = new graphql_redis_subscriptions_1.RedisPubSub();
+var redisclient_1 = require("../../../frontend/src/services/redisclient");
 var serverGameListService_1 = require("./../../services/serverGameListService");
 var userService_1 = require("./../../services/userService");
 exports.gameListResolver = {
@@ -26,7 +27,7 @@ exports.gameListResolver = {
     },
     Subscription: {
         updateGameList: {
-            subscribe: function (_, __) { return pubSub.asyncIterator(['UPDATE_GAMELIST']); }
+            subscribe: function (_, __) { return redisclient_1.pubSub.asyncIterator(['UPDATE_GAMELIST']); }
         },
     }
 };

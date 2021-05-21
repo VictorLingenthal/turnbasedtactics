@@ -1,7 +1,8 @@
 
 import { withFilter } from 'apollo-server'
-import { RedisPubSub } from 'graphql-redis-subscriptions';
-const pubSub = new RedisPubSub();
+import { pubSub } from '../../../frontend/src/services/redisclient'
+// import { RedisPubSub } from 'graphql-redis-subscriptions';
+// const pubSub = new RedisPubSub();
 
 import { ServerGameListService } from '../../services/serverGameListService'
 

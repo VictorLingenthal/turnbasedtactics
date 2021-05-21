@@ -1,6 +1,8 @@
 
-import { RedisPubSub } from 'graphql-redis-subscriptions';
-const pubSub = new RedisPubSub();
+// import { RedisPubSub } from 'graphql-redis-subscriptions';
+// const pubSub = new RedisPubSub();
+
+import { pubSub } from '../../../frontend/src/services/redisclient'
 
 import { ServerGameListService } from './../../services/serverGameListService'
 import { UserService } from './../../services/userService'
