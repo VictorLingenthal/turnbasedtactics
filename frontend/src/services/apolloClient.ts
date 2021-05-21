@@ -3,7 +3,7 @@ import { ApolloClient, InMemoryCache, HttpLink, split, gql } from '@apollo/clien
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from 'apollo-utilities';
 
-console.log('ApolloClient')
+console.log('ApolloClient - test')
 console.log(document.location.host)
 
 const httpLink = new HttpLink({
