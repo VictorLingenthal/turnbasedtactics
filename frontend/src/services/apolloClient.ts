@@ -3,6 +3,9 @@ import { ApolloClient, InMemoryCache, HttpLink, split, gql } from '@apollo/clien
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from 'apollo-utilities';
 
+console.log('ApolloClient')
+console.log(document.location.host)
+
 const httpLink = new HttpLink({
   // uri: 'http://localhost:4444/graphql'
   uri: 'http://' + document.location.host + '/graphql'
