@@ -19,12 +19,12 @@ export interface IGameState {
 export interface IGame {
   players: IPlayer[]
   remaining_players: IPlayer[]
-  winner: IPlayer
+  winner: IPlayer|null
   turn: number
   currentPlayer: IPlayer
   units: ILiveUnit[]
 
-  getWinner():IPlayer
+  getWinner():IPlayer|null
 
   getUnitsByPlayer(player:IPlayer):ILiveUnit[]
   applyAbility(applyingUnit:ILiveUnit, unitability:IUnitAbility, receivingUnit:ILiveUnit, receivingUnits:ILiveUnit[]):boolean
@@ -37,7 +37,7 @@ export class Game implements IGame {
   public players: IPlayer[]
   public remaining_players: IPlayer[]
   public currentPlayer: IPlayer
-  public winner: IPlayer
+  public winner: IPlayer|null
   public turn: number
   public units: ILiveUnit[]
 
@@ -49,6 +49,7 @@ export class Game implements IGame {
     this.turn = args.turn || 0
     this.currentPlayer = args.currentPlayer || args.players[0]
     this.units = []
+    this.winner = null
 
     this.initializeGame()
   }
@@ -57,9 +58,12 @@ export class Game implements IGame {
     this.players.map(player => player.units = this.initializeUnits(player))
 
   private initializeUnits = (player:IPlayer):ILiveUnit[] => {
-    const playerUnits = player.unitModels.map((unitModel, idx) => new GameUnit(idx, player, unitModel))
-    this.units = [...this.units, ...playerUnits]
-    return playerUnits
+    const playerUnits = player.unitModels?.map((unitModel, idx) => new GameUnit(idx, player, unitModel))
+    if (playerUnits) {
+      this.units = [...this.units, ...playerUnits]
+      return playerUnits
+    } else
+      return this.units
   }
 
   private insertUnits = (units:ILiveUnit[]):void => {
@@ -108,7 +112,8 @@ export class Game implements IGame {
 
   private changeTurn = () => {
     if (this.checkForWinner()) {
-      this.gameService?.endGame(this.winner)
+      if (this.winner)
+        this.gameService?.endGame(this.winner)
     } else {
       this.changeTurnTimeouts()
       this.switchToNextPlayer()
@@ -155,7 +160,7 @@ export class Game implements IGame {
     return false
   }
 
-  public getWinner = ():IPlayer => this.winner
+  public getWinner = ():IPlayer|null => this.winner
 
 
 }

@@ -11,7 +11,7 @@ export interface IGameServiceConstructor {
   players?: IPlayerStub
 }
 
-interface IGameServiceObserver {
+export interface IGameServiceObserver {
   endGame(winner:IPlayer):void
 }
 

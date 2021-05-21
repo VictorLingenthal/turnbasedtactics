@@ -7,10 +7,10 @@ import hash  from 'object-hash'
 import { IloginResult } from '../../frontend/src/interfaces/loginResult'
 
 export interface IActiveUser {
-  username: String
-  userID: String
-  sessionID: String
-  lastlogin: Number
+  username: string
+  userID: string
+  sessionID: string
+  lastlogin: number
 }
 
 export interface IUserService {

@@ -25,9 +25,9 @@ Turn Based Tactics Game
 - unit tests
 - User/Account Management
 
-## Fixes
+## Fixes/Bugs
 
-- BUG: If login clicked twice because of delay with mongoDB
+- None that I know of currently :D
 
 ## License
 

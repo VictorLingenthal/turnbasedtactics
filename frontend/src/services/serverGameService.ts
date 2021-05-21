@@ -1,5 +1,8 @@
 
 import { GameService, IGameService } from './gameService'
+import { IGameServiceObserver } from './gameService'
+import { IPlayerStub } from '../gamelogic/player'
+
 
 export interface IServerGameService extends IGameService {
 
@@ -7,7 +10,11 @@ export interface IServerGameService extends IGameService {
 
 export class ServerGameService extends GameService implements IServerGameService {
 
-  constructor (args) {
+  constructor (args: {
+    gameServiceObserver: IGameServiceObserver
+    gameID: String
+    players: IPlayerStub[]
+  }) {
     super(args)
   }
 

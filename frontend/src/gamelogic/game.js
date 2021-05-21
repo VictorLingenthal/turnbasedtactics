@@ -16,9 +16,14 @@ var Game = /** @class */ (function () {
             return _this.players.map(function (player) { return player.units = _this.initializeUnits(player); });
         };
         this.initializeUnits = function (player) {
-            var playerUnits = player.unitModels.map(function (unitModel, idx) { return new liveUnit_1.GameUnit(idx, player, unitModel); });
-            _this.units = __spreadArrays(_this.units, playerUnits);
-            return playerUnits;
+            var _a;
+            var playerUnits = (_a = player.unitModels) === null || _a === void 0 ? void 0 : _a.map(function (unitModel, idx) { return new liveUnit_1.GameUnit(idx, player, unitModel); });
+            if (playerUnits) {
+                _this.units = __spreadArrays(_this.units, playerUnits);
+                return playerUnits;
+            }
+            else
+                return _this.units;
         };
         this.insertUnits = function (units) {
             for (var i in units)
@@ -62,7 +67,8 @@ var Game = /** @class */ (function () {
         this.changeTurn = function () {
             var _a;
             if (_this.checkForWinner()) {
-                (_a = _this.gameService) === null || _a === void 0 ? void 0 : _a.endGame(_this.winner);
+                if (_this.winner)
+                    (_a = _this.gameService) === null || _a === void 0 ? void 0 : _a.endGame(_this.winner);
             }
             else {
                 _this.changeTurnTimeouts();
@@ -106,6 +112,7 @@ var Game = /** @class */ (function () {
         this.turn = args.turn || 0;
         this.currentPlayer = args.currentPlayer || args.players[0];
         this.units = [];
+        this.winner = null;
         this.initializeGame();
     }
     return Game;

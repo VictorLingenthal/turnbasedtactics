@@ -26,6 +26,6 @@ const userSchema: Schema = new Schema ({
   timestamps: true
 })
 
-const User: Model<IUser> = model('User', userSchema)
+const User: Model<IDBUser> = model('User', userSchema)
 
 export default User
