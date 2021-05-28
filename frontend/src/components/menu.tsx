@@ -4,6 +4,7 @@ import { FC, useState } from 'react'
 import './scss/menu.scss'
 import Auth from './auth'
 import { routeStates } from '../model/routeStates.model'
+import { UserService } from '../services/userService'
 
 let Menu: FC<{
   routeState:[String,Function]
@@ -21,7 +22,7 @@ let Menu: FC<{
           GameList
           {route === routeStates.GAMELIST && <span> &lt;-</span>}
         </li>
-        <li onClick={e => setRoute(routeStates.GAME)}>
+        <li onClick={e => UserService.getInstance().getUserID() && setRoute(routeStates.GAME)}>
           Game
           {route === routeStates.GAME && <span> &lt;-</span>}
         </li>

@@ -12,6 +12,7 @@ export interface ILoginData {
 export interface IUserService {
   userID:string
   sessionID:string
+  getUserID():string|false
   login(loginData:ILoginData):Promise<any>
   register(loginData:ILoginData):Promise<any>
   checkAuth():Promise<any>
@@ -22,16 +23,33 @@ export class UserService implements IUserService {
   public userID:string
   public sessionID:string
   private static instance: IUserService
+  private setLoginMessage
 
-  private constructor () {
+  private constructor (setLoginMessage) {
     this.sessionID = cookieService.getCookie(CookieNameEnum.SESSIONID)
+    this.setLoginMessage = setLoginMessage
   }
 
-  public static getInstance(): IUserService {
+  public static getInstance(setLoginMessage?): IUserService {
     if (!UserService.instance)
-      UserService.instance = new UserService()
+      UserService.instance = new UserService(setLoginMessage)
 
     return UserService.instance
+  }
+
+  getUserID = () => {
+    if (this.userID)
+      return this.userID
+    else {
+      if (this.setLoginMessage)
+        this.setLoginMessage({
+          userID: null,
+          sessionID: null,
+          message: "Please Login/Register first",
+        })
+      else console.warn('userService - getUserID(): setLoginMessage not set')
+      return false
+    }
   }
 
   public async checkAuth() {

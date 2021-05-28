@@ -95,7 +95,7 @@ export class GameListService implements IGameListService {
   public openGame = () =>
     apolloClient.mutate({
       variables: {
-        userID: UserService.getInstance().userID,
+        userID: UserService.getInstance().getUserID(),
       },
       mutation: gql`
         mutation OpenGame(
@@ -116,7 +116,7 @@ export class GameListService implements IGameListService {
   public joinGame = (gameStub) =>
     apolloClient.mutate({
       variables: {
-        userID: UserService.getInstance().userID,
+        userID: UserService.getInstance().getUserID(),
         gameID: gameStub.gameID,
       },
       mutation: gql`
@@ -141,7 +141,7 @@ export class GameListService implements IGameListService {
     const self = this
     return apolloClient.subscribe({
       variables: {
-        userID: UserService.getInstance().userID
+        userID: UserService.getInstance().getUserID()
       },
       query: gql`
         subscription onNewGame {
@@ -168,7 +168,7 @@ export class GameListService implements IGameListService {
         if (
           returnedGameData.startNewGame &&
           returnedGameData.players.length === 2 &&
-          returnedGameData.players.filter(player => player.userID === UserService.getInstance().userID).length != 0
+          returnedGameData.players.filter(player => player.userID === UserService.getInstance().getUserID()).length != 0
         ) self.startGame(returnedGameData, setRoute)
 
       }

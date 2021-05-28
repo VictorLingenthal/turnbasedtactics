@@ -9,8 +9,6 @@ let Auth: FC<{
 
 }> = (props) => {
 
-  const userService = UserService.getInstance()
-
   const [awaitResponse, setAwaitResponse] = useState<Boolean>(false)
 
   const [showRegister, setShowRegister] = useState<Boolean>(false)
@@ -19,6 +17,8 @@ let Auth: FC<{
     sessionID: null,
     message: "",
   })
+
+  const userService = UserService.getInstance(setLoginMessage)
 
   useEffect(() => {
     const userID = userService.userID

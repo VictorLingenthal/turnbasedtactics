@@ -2,6 +2,7 @@
 import { FC, useState, useEffect } from 'react'
 
 import { GameListService, IGameStub } from '../services/gameListService'
+import { UserService } from '../services/userService'
 import './scss/gameList.scss'
 
 import { GameStateEnum } from '../model/gameStates.model'
@@ -22,7 +23,10 @@ export let GameList: FC<{
 
       <h1>Gamelist</h1>
       <div className="openGame">
-        <button onClick={e => gameListService.openGame()}>Open New Game</button>
+        <button onClick={e =>
+          UserService.getInstance().getUserID() &&
+          gameListService.openGame()
+        }>Open New Game</button>
       </div>
 
       <table className="gameList">

@@ -16,7 +16,8 @@ export let Game: FC<{
   const setRoute = props.setRoute
 
   const [rerender, setRerender] = useState(0)
-  gameService.rerenderView = () => setRerender(rerender+1)
+
+  if (gameService) gameService.rerenderView = () => setRerender(rerender+1)
   useEffect(() => {},[rerender])
 
   const selectedUnitState = useState(null)
@@ -25,7 +26,7 @@ export let Game: FC<{
   const selectedAbilityState = useState<IUnitAbility|null>(null)
   const [selectedAbilty, setSelectedAbility] = selectedAbilityState
 
-  return (
+  if (gameService) return (
     <div className="Game">
       <div className="Timer">
         Timer: Todo
@@ -90,5 +91,6 @@ export let Game: FC<{
         }
       </div>
     </div>
-  )
+  ); else return (<div>No Game started</div>)
+
 }
